@@ -1,0 +1,1958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OFF RIP — A Film by Jadon Cal</title>
+<meta name="description" content="The first skimboarding sports drama in cinema history. Winner — Best Florida Feature, Gasparilla International Film Festival 2025." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0907;
+    --ink: #15110b;
+    --bone: #f0e6d2;
+    --bone-warm: #e8dcc0;
+    --sand: #d4bc8c;
+    --sand-deep: #b89d68;
+    --rust: #8b4a26;
+    --burnt: #5c2e15;
+    --gold: #d4a04a;
+    --ocean: #2d5f6e;
+    --ocean-deep: #1a3d4a;
+    --ocean-light: #5a8a98;
+    --foam: #d8e4e6;
+    --shadow: #2a1f12;
+    --line: rgba(240,230,210,0.18);
+    --line-dark: rgba(21,17,11,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--black);
+    color: var(--bone);
+    overflow-x: hidden;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* === FILM GRAIN === */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.85 0 0 0 0 0.7 0 0 0 0.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.08;
+    mix-blend-mode: overlay;
+    animation: grainShift 0.5s steps(3) infinite;
+  }
+  @keyframes grainShift {
+    0%, 100% { transform: translate(0, 0); }
+    33% { transform: translate(-1px, 1px); }
+    66% { transform: translate(1px, -1px); }
+  }
+
+  /* === TOP BAR === */
+  .top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--black);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .top-bar-track {
+    display: flex;
+    gap: 64px;
+    white-space: nowrap;
+    animation: scroll 50s linear infinite;
+    width: max-content;
+    padding: 14px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--bone);
+    font-weight: 300;
+  }
+  .top-bar-track .div { color: var(--gold); opacity: 0.8; }
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* === NAV === */
+  nav {
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 90;
+    background: rgba(10,9,7,0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    color: var(--bone);
+    padding: 6px;
+    display: flex;
+    gap: 2px;
+    transition: opacity 0.4s, transform 0.4s cubic-bezier(.2,.8,.2,1);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+  }
+  nav a {
+    text-decoration: none;
+    color: var(--bone);
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    transition: all 0.2s;
+    border-radius: 999px;
+    opacity: 0.75;
+  }
+  nav a:hover {
+    opacity: 1;
+    background: rgba(240,230,210,0.08);
+  }
+  nav.hide {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-200%);
+  }
+
+  /* === HERO === */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--black);
+  }
+
+  /* Sunset sky meeting ocean horizon */
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -3;
+    background: linear-gradient(180deg,
+      #f4c878 0%,
+      #d49050 14%,
+      #8b4a26 26%,
+      #5a3d4a 38%,
+      #3a4d5e 48%,
+      #2d5f6e 56%,
+      #1a3d4a 70%,
+      #15110b 92%);
+  }
+  /* warm sun glow at horizon */
+  .hero-sun {
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    top: 28%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: -2;
+    background: radial-gradient(circle at 50% 50%,
+      #fff2c0 0%,
+      #f4cc78 18%,
+      rgba(212,160,74,0.5) 38%,
+      transparent 65%);
+    filter: blur(20px);
+    animation: sunDrift 14s ease-in-out infinite;
+  }
+  @keyframes sunDrift {
+    0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.85; }
+    50% { transform: translateX(-50%) scale(1.06); opacity: 1; }
+  }
+
+  /* OCEAN — animated water layers */
+  .hero-ocean {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 36%;
+    z-index: -1;
+    overflow: hidden;
+  }
+  .hero-water {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+      #2d5f6e 0%,
+      #1a3d4a 50%,
+      #0a1f28 100%);
+  }
+  /* light reflections shimmering on water */
+  .hero-shimmer {
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(180deg,
+        transparent 0px,
+        transparent 3px,
+        rgba(244,200,120,0.06) 3px,
+        rgba(244,200,120,0.06) 4px);
+    animation: shimmer 8s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0%, 100% { opacity: 0.4; transform: translateY(0); }
+    50% { opacity: 0.7; transform: translateY(-2px); }
+  }
+  /* slow rolling waves */
+  .hero-waves {
+    position: absolute;
+    bottom: 0;
+    left: -10%;
+    width: 220%;
+    height: 60%;
+  }
+  .hero-waves svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .wave-path-1 {
+    animation: waveMove 24s linear infinite;
+  }
+  .wave-path-2 {
+    animation: waveMove 32s linear infinite reverse;
+  }
+  .wave-path-3 {
+    animation: waveMove 18s linear infinite;
+  }
+  @keyframes waveMove {
+    from { transform: translateX(0); }
+    to { transform: translateX(-25%); }
+  }
+
+  /* sandy beach line */
+  .hero-sand {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 8%;
+    z-index: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(21,17,11,0.7) 60%, var(--black) 100%);
+  }
+
+  /* PALM FRONDS on edges */
+  .hero-palm-left, .hero-palm-right {
+    position: absolute;
+    top: 0;
+    z-index: 0;
+    width: 280px;
+    height: 60%;
+    pointer-events: none;
+    opacity: 0.6;
+    animation: sway 8s ease-in-out infinite;
+  }
+  .hero-palm-left { left: -40px; transform-origin: top left; }
+  .hero-palm-right { right: -40px; transform-origin: top right; animation-delay: -4s; transform: scaleX(-1); }
+  .hero-palm-left svg, .hero-palm-right svg { width: 100%; height: 100%; display: block; }
+  @keyframes sway {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(1.5deg); }
+  }
+  .hero-palm-right { animation: swayRight 8s ease-in-out infinite -4s; }
+  @keyframes swayRight {
+    0%, 100% { transform: scaleX(-1) rotate(0deg); }
+    50% { transform: scaleX(-1) rotate(1.5deg); }
+  }
+
+  @media (max-width: 720px) {
+    .hero-palm-left, .hero-palm-right {
+      width: 160px;
+      opacity: 0.4;
+    }
+  }
+
+  /* film grain on hero */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.85 0 0 0 0 0.7 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.16;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: 1;
+  }
+  /* vignette */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 50%, transparent 35%, rgba(10,9,7,0.4) 80%, rgba(10,9,7,0.85) 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 3;
+    height: 100vh;
+    min-height: 700px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 100px 48px 60px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+  @media (max-width: 720px) {
+    .hero-content { padding: 100px 24px 40px; }
+  }
+
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .hero-credit {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--bone);
+    opacity: 0.65;
+    font-weight: 300;
+    line-height: 1.8;
+  }
+  .hero-credit strong {
+    color: var(--gold);
+    font-weight: 400;
+    margin-right: 8px;
+  }
+
+  .hero-laurel {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--gold);
+    text-align: right;
+    line-height: 1.5;
+    opacity: 0.9;
+    max-width: 220px;
+  }
+  .hero-laurel::before { content: '✦ '; }
+
+  .hero-title-block {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 40px 0;
+  }
+  .hero-tag {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(20px, 2.4vw, 28px);
+    color: var(--bone-warm);
+    margin-bottom: 18px;
+    font-weight: 400;
+    opacity: 0.9;
+    max-width: 600px;
+  }
+  .title {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(120px, 22vw, 340px);
+    line-height: 0.82;
+    letter-spacing: -0.04em;
+    color: var(--bone);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    font-weight: 400;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.4);
+    animation: titleIn 1.4s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes titleIn {
+    from { opacity: 0; transform: translateY(30px); letter-spacing: -0.02em; }
+    to { opacity: 1; transform: translateY(0); letter-spacing: -0.04em; }
+  }
+  .title-tagline {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(20px, 2.6vw, 32px);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 400;
+    opacity: 0;
+    animation: fadeIn 1.4s cubic-bezier(.2,.8,.2,1) 0.6s forwards;
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  .hero-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .hero-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(14px, 1.4vw, 16px);
+    max-width: 460px;
+    color: rgba(240,230,210,0.78);
+    line-height: 1.6;
+    font-weight: 400;
+  }
+  .hero-ctas {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  /* === BUTTONS === */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 26px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--bone);
+    background: transparent;
+    border: 1.5px solid var(--bone);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(.2,.8,.2,1);
+    position: relative;
+    overflow: hidden;
+  }
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: var(--bone);
+    transition: left 0.35s cubic-bezier(.2,.8,.2,1);
+    z-index: 0;
+  }
+  .btn:hover { color: var(--ink); }
+  .btn:hover::before { left: 0; }
+  .btn span { position: relative; z-index: 1; display: inline-flex; gap: 8px; align-items: center; }
+  .btn-solid {
+    background: var(--bone);
+    color: var(--ink);
+    border-color: var(--bone);
+  }
+  .btn-solid::before { background: var(--gold); }
+  .btn-solid:hover { color: var(--ink); }
+  .btn-dark {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  .btn-dark::before { background: var(--ink); }
+  .btn-dark:hover { color: var(--bone); }
+
+  /* === SCROLL HINT === */
+  .scroll-hint {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 4;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--bone);
+    opacity: 0.5;
+    text-align: center;
+  }
+  .scroll-hint::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 30px;
+    background: var(--bone);
+    margin: 12px auto 0;
+    opacity: 0.5;
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(1); opacity: 0.5; }
+    50% { transform: scaleY(1.5); opacity: 1; }
+  }
+
+  /* === SECTION HEADERS === */
+  .label {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    font-weight: 400;
+  }
+  .label::before { content: '— '; }
+  .section-title {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(56px, 8vw, 130px);
+    line-height: 0.88;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin-bottom: 32px;
+    color: var(--bone);
+  }
+  .section-title em {
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    color: var(--gold);
+    letter-spacing: -0.01em;
+  }
+
+  /* === TRAILER SECTION (warm sand background) === */
+  .trailer-section {
+    position: relative;
+    padding: 140px 24px;
+    background: linear-gradient(180deg, #2a1f12 0%, #3d2d1c 100%);
+    overflow: hidden;
+  }
+  .trailer-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 0% 0%, rgba(212,160,74,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 100% 100%, rgba(45,95,110,0.15) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  /* sandy texture */
+  .trailer-section::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.83 0 0 0 0 0.74 0 0 0 0 0.55 0 0 0 0.3 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .trailer-grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+  @media (max-width: 900px) {
+    .trailer-grid { grid-template-columns: 1fr; gap: 50px; }
+  }
+
+  .trailer-frame {
+    position: relative;
+    aspect-ratio: 16/9;
+    background: var(--black);
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.6s cubic-bezier(.2,.8,.2,1);
+    border: 1px solid var(--line);
+  }
+  .trailer-frame:hover {
+    transform: scale(1.01);
+  }
+  .trailer-still {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg,
+        rgba(244,200,120,0.3) 0%,
+        rgba(212,144,80,0.5) 25%,
+        rgba(45,95,110,0.5) 60%,
+        rgba(26,61,74,0.85) 85%,
+        var(--black) 100%);
+    z-index: 1;
+    transition: transform 8s ease-out;
+  }
+  .trailer-frame:hover .trailer-still {
+    transform: scale(1.05);
+  }
+  .trailer-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.85 0 0 0 0 0.7 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+    z-index: 2;
+    pointer-events: none;
+    animation: grainShift 0.5s steps(3) infinite;
+  }
+  .frame-figure {
+    position: absolute;
+    bottom: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22%;
+    height: 65%;
+    z-index: 1;
+  }
+  .frame-figure svg { width: 100%; height: 100%; display: block; }
+
+  .frame-meta {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    z-index: 3;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--bone);
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+  .frame-meta .rec-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--rust);
+    border-radius: 50%;
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .frame-time {
+    position: absolute;
+    bottom: 18px;
+    right: 18px;
+    z-index: 3;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--bone);
+    opacity: 0.85;
+  }
+  .frame-bars {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .frame-bars::before, .frame-bars::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 8%;
+    background: var(--black);
+  }
+  .frame-bars::before { top: 0; }
+  .frame-bars::after { bottom: 0; }
+
+  .play-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    width: 90px;
+    height: 90px;
+    background: rgba(240,230,210,0.95);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.35s cubic-bezier(.2,.8,.2,1);
+    backdrop-filter: blur(10px);
+  }
+  .trailer-frame:hover .play-circle {
+    background: var(--gold);
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+  .play-circle::after {
+    content: '';
+    width: 0; height: 0;
+    border-left: 22px solid var(--ink);
+    border-top: 16px solid transparent;
+    border-bottom: 16px solid transparent;
+    margin-left: 6px;
+  }
+
+  .trailer-info h2 {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(40px, 5vw, 68px);
+    line-height: 0.95;
+    margin-bottom: 24px;
+    color: var(--bone);
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+  }
+  .trailer-info h2 em {
+    color: var(--gold);
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+  }
+  .trailer-info p {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(240,230,210,0.78);
+    margin-bottom: 18px;
+    font-weight: 300;
+  }
+  .trailer-info p:last-of-type { margin-bottom: 28px; }
+  .meta-row {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    margin-top: 24px;
+    text-transform: uppercase;
+    color: var(--bone);
+    opacity: 0.7;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+  .meta-row span strong {
+    color: var(--gold);
+    font-weight: 400;
+    margin-right: 6px;
+  }
+
+  /* === SHORELINE — daytime breath section === */
+  .shoreline {
+    position: relative;
+    padding: 180px 24px;
+    overflow: hidden;
+    background: linear-gradient(180deg,
+      #5a8a98 0%,
+      #7ba6b3 30%,
+      #d4bc8c 70%,
+      #b89d68 100%);
+    color: var(--ink);
+  }
+  /* sun haze */
+  .shoreline::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    top: -200px;
+    right: -100px;
+    background: radial-gradient(circle, rgba(255,242,192,0.7) 0%, rgba(244,200,120,0.3) 30%, transparent 60%);
+    filter: blur(20px);
+    pointer-events: none;
+  }
+  /* sandy texture overlay */
+  .shoreline::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.83 0 0 0 0 0.74 0 0 0 0 0.55 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  /* ocean wave silhouette across middle */
+  .shoreline-waves {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 25%;
+    transform: translateY(-50%);
+    z-index: 0;
+    opacity: 0.35;
+  }
+  .shoreline-waves svg { width: 100%; height: 100%; display: block; }
+
+  .shoreline-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+  .shoreline-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.25;
+    color: var(--ink);
+    font-weight: 400;
+    margin-bottom: 36px;
+  }
+  .shoreline-quote em {
+    font-style: italic;
+    font-family: 'Anton', sans-serif;
+    font-weight: 400;
+    color: var(--burnt);
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    font-size: 1.15em;
+    line-height: 1;
+    display: inline-block;
+  }
+  .shoreline-cite {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--burnt);
+    opacity: 0.85;
+  }
+  .shoreline-cite::before { content: '— '; }
+
+  /* sandy strip dividers */
+  .sand-strip {
+    height: 4px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      var(--sand-deep) 20%,
+      var(--sand) 50%,
+      var(--sand-deep) 80%,
+      transparent 100%);
+    opacity: 0.5;
+  }
+
+  /* === FILM SECTION === */
+  .film {
+    padding: 140px 24px;
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+  }
+  /* subtle ocean glow at top */
+  .film::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(180deg, rgba(45,95,110,0.15), transparent);
+    pointer-events: none;
+  }
+  .film-grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 0.85fr 1fr;
+    gap: 90px;
+    align-items: center;
+    position: relative;
+  }
+  @media (max-width: 900px) {
+    .film-grid { grid-template-columns: 1fr; gap: 60px; }
+  }
+
+  .poster {
+    position: relative;
+    aspect-ratio: 27/40;
+    background: var(--ink);
+    overflow: hidden;
+    transition: transform 0.6s cubic-bezier(.2,.8,.2,1);
+    cursor: pointer;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  }
+  .poster:hover { transform: translateY(-8px); }
+  .poster-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg,
+        #f4c878 0%,
+        #d49050 20%,
+        #5a3d4a 40%,
+        #2d5f6e 60%,
+        #1a3d4a 80%,
+        var(--black) 100%);
+    z-index: 0;
+  }
+  .poster-sun {
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    bottom: 28%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    background: radial-gradient(circle at 50% 50%,
+      #fff5d0 0%,
+      #f4cc78 30%,
+      transparent 60%);
+    filter: blur(8px);
+    z-index: 0;
+  }
+  .poster-portrait {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    height: 65%;
+    z-index: 1;
+  }
+  .poster-portrait svg { width: 100%; height: 100%; display: block; }
+  .poster::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.85 0 0 0 0 0.7 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0.7;
+  }
+  .poster-title {
+    position: absolute;
+    top: 6%;
+    left: 6%;
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(52px, 9vw, 100px);
+    color: var(--bone);
+    letter-spacing: -0.03em;
+    z-index: 4;
+    text-transform: uppercase;
+    line-height: 0.85;
+    font-weight: 400;
+    text-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  }
+  .poster-credits {
+    position: absolute;
+    bottom: 10%;
+    left: 6%;
+    right: 6%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    color: var(--bone);
+    letter-spacing: 0.22em;
+    line-height: 1.7;
+    z-index: 4;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+  .poster-credits strong {
+    color: var(--gold);
+    font-weight: 400;
+    margin-right: 6px;
+  }
+  .poster-tagline {
+    position: absolute;
+    bottom: 4%;
+    left: 6%;
+    right: 6%;
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(13px, 1.5vw, 17px);
+    color: var(--gold);
+    z-index: 4;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+  }
+
+  .film-text h2 {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(56px, 7vw, 100px);
+    line-height: 0.9;
+    margin-bottom: 32px;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    color: var(--bone);
+    font-weight: 400;
+  }
+  .film-text h2 em {
+    color: var(--gold);
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+  }
+  .film-text .lead {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    line-height: 1.45;
+    margin-bottom: 26px;
+    color: var(--bone-warm);
+    font-weight: 400;
+    font-style: italic;
+  }
+  .film-text p {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    margin-bottom: 20px;
+    color: rgba(240,230,210,0.72);
+    font-weight: 300;
+  }
+  .pull-quote {
+    border-left: 2px solid var(--gold);
+    padding: 8px 0 8px 28px;
+    margin: 36px 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--bone);
+    font-weight: 400;
+  }
+  .pull-quote cite {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 10px;
+    color: var(--gold);
+    margin-top: 14px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    font-weight: 400;
+  }
+
+  /* === STILLS GALLERY === */
+  .stills {
+    padding: 140px 0;
+    background: var(--ink);
+    overflow: hidden;
+    position: relative;
+  }
+  .stills-header {
+    max-width: 1280px;
+    margin: 0 auto 60px;
+    padding: 0 24px;
+  }
+  .stills-strip {
+    display: flex;
+    gap: 4px;
+    width: max-content;
+    animation: strip 60s linear infinite;
+  }
+  @keyframes strip {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .still {
+    width: 360px;
+    aspect-ratio: 16/9;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .still::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.85 0 0 0 0 0.7 0 0 0 0.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+  /* daytime + sunset mix */
+  .still-1 { background: linear-gradient(135deg, #f4c878, #8b4a26 60%, #2a1f12); }
+  .still-2 { background: linear-gradient(180deg, #5a8a98 30%, #2d5f6e 70%, #1a3d4a); }
+  .still-3 { background: linear-gradient(180deg, #f4cc78 20%, #d49050 50%, #2a1f12); }
+  .still-4 { background: linear-gradient(180deg, #7ba6b3 30%, #d4bc8c 70%, #b89d68); }
+  .still-5 { background: linear-gradient(180deg, #8b4a26 20%, #2a1f12 70%, #15110b); }
+  .still-6 { background: linear-gradient(135deg, #d4bc8c 0%, #5a8a98 50%, #2d5f6e 100%); }
+  .still-label {
+    position: absolute;
+    bottom: 12px;
+    left: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--bone);
+    opacity: 0.7;
+    z-index: 2;
+  }
+
+  /* === TEAM === */
+  .team {
+    padding: 140px 24px;
+    background: var(--black);
+    color: var(--bone);
+    position: relative;
+    overflow: hidden;
+  }
+  .team-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .team-header { margin-bottom: 70px; max-width: 720px; }
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px;
+  }
+  .team-card {
+    transition: all 0.4s cubic-bezier(.2,.8,.2,1);
+    cursor: pointer;
+  }
+  .team-photo {
+    width: 100%;
+    aspect-ratio: 3/4;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--rust), var(--burnt));
+    transition: transform 0.4s cubic-bezier(.2,.8,.2,1);
+  }
+  .team-photo > span {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    font-family: 'Anton', sans-serif;
+    font-size: 56px;
+    color: var(--bone);
+    letter-spacing: -0.03em;
+    z-index: 2;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+    line-height: 0.85;
+  }
+  .team-photo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.7) 100%);
+    z-index: 1;
+  }
+  .team-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.85 0 0 0 0 0.7 0 0 0 0.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .team-card:hover .team-photo {
+    transform: translateY(-4px);
+  }
+  .team-name {
+    font-family: 'Anton', sans-serif;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    color: var(--bone);
+    margin-bottom: 4px;
+    font-weight: 400;
+    line-height: 1.05;
+  }
+  .team-role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  /* === MERCH === */
+  .merch {
+    padding: 140px 24px;
+    background: var(--ink);
+    position: relative;
+  }
+  .merch-inner { max-width: 1280px; margin: 0 auto; }
+  .merch-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 60px;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  .merch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 32px;
+  }
+  .product {
+    transition: all 0.4s cubic-bezier(.2,.8,.2,1);
+    cursor: pointer;
+  }
+  .product:hover .product-img-wrap {
+    transform: translateY(-8px);
+  }
+  .product-img-wrap {
+    transition: transform 0.4s cubic-bezier(.2,.8,.2,1);
+    margin-bottom: 18px;
+  }
+  .product-img {
+    aspect-ratio: 1;
+    position: relative;
+    overflow: hidden;
+    background: var(--black);
+  }
+  .product-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.85 0 0 0 0 0.7 0 0 0 0.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .product-tee .product-img { background: linear-gradient(135deg, var(--rust), var(--burnt)); }
+  .product-cap .product-img { background: linear-gradient(135deg, var(--ocean), var(--ocean-deep)); }
+  .product-poster .product-img { background: linear-gradient(180deg, var(--gold), var(--burnt) 60%, var(--black)); }
+  .product-board .product-img { background: linear-gradient(135deg, var(--bone-warm), var(--sand)); }
+  .product-img-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Anton', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 0.85;
+    text-align: center;
+    z-index: 2;
+    color: var(--bone);
+    font-size: 36px;
+  }
+  .product-board .product-img-inner { color: var(--ink); }
+  .product-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .product-name {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--bone);
+  }
+  .product-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--bone);
+    opacity: 0.5;
+    margin-top: 4px;
+  }
+  .product-price {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+
+  /* === STREAMING === */
+  .stream {
+    padding: 140px 24px;
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+  }
+  .stream::before {
+    content: '';
+    position: absolute;
+    top: -300px;
+    right: -200px;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(212,160,74,0.08), transparent 60%);
+    pointer-events: none;
+  }
+  .stream-inner { max-width: 1100px; margin: 0 auto; position: relative; }
+  .stream-header { text-align: center; margin-bottom: 70px; }
+  .stream-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--bone-warm);
+    max-width: 580px;
+    margin: 0 auto;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+  .stream-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .stream-btn {
+    padding: 32px 28px;
+    background: var(--black);
+    color: var(--bone);
+    text-decoration: none;
+    font-family: 'Anton', sans-serif;
+    font-size: 24px;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    transition: all 0.4s cubic-bezier(.2,.8,.2,1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    cursor: pointer;
+    font-weight: 400;
+    position: relative;
+    overflow: hidden;
+  }
+  .stream-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, var(--rust), var(--burnt));
+    opacity: 0;
+    transition: opacity 0.4s;
+    z-index: 0;
+  }
+  .stream-btn:hover::before { opacity: 1; }
+  .stream-btn span { position: relative; z-index: 1; }
+  .stream-btn .arrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    opacity: 0.5;
+    transition: all 0.3s;
+  }
+  .stream-btn:hover .arrow {
+    opacity: 1;
+    transform: translateX(4px);
+  }
+
+  /* === EMAIL CTA — sunset beach === */
+  .email-cta {
+    padding: 160px 24px;
+    background: linear-gradient(180deg,
+      #f4c878 0%,
+      #d49050 18%,
+      #8b4a26 35%,
+      #5a3d4a 50%,
+      #3a4d5e 62%,
+      #2d5f6e 75%,
+      #1a3d4a 100%);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    color: var(--bone);
+  }
+  /* sun glow */
+  .email-cta::before {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    bottom: 30%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    background: radial-gradient(circle, rgba(255,242,192,0.5), transparent 60%);
+    filter: blur(20px);
+    pointer-events: none;
+  }
+  /* gentle wave at bottom */
+  .email-cta-waves {
+    position: absolute;
+    bottom: 0;
+    left: -10%;
+    width: 220%;
+    height: 25%;
+    z-index: 1;
+    opacity: 0.4;
+  }
+  .email-cta-waves svg { width: 100%; height: 100%; display: block; }
+  /* grain */
+  .email-cta::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.85 0 0 0 0 0.7 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.18;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+  .email-cta-inner { max-width: 640px; margin: 0 auto; position: relative; z-index: 2; }
+  .email-cta .label { color: var(--ink); }
+  .email-cta .label::before { color: var(--ink); }
+  .email-cta .section-title {
+    color: var(--bone);
+    margin-bottom: 24px;
+    text-shadow: 0 2px 30px rgba(0,0,0,0.3);
+  }
+  .email-cta .section-title em { color: var(--gold); }
+  .email-cta p {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 22px;
+    margin-bottom: 40px;
+    line-height: 1.5;
+    color: var(--bone-warm);
+    font-weight: 400;
+  }
+  .email-form {
+    display: flex;
+    gap: 0;
+    max-width: 540px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--bone);
+    padding-bottom: 4px;
+  }
+  .email-form input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 16px 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: var(--bone);
+    outline: none;
+    min-width: 0;
+  }
+  .email-form input::placeholder { color: rgba(240,230,210,0.55); }
+  .email-form button {
+    border: none;
+    background: transparent;
+    color: var(--bone);
+    padding: 14px 8px 14px 24px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .email-form button:hover {
+    color: var(--gold);
+  }
+  .email-success {
+    margin-top: 28px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--gold);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s;
+  }
+  .email-success.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* === FOOTER === */
+  footer {
+    padding: 120px 24px 40px;
+    background: var(--black);
+    color: var(--bone);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+  }
+  .footer-title {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(80px, 18vw, 280px);
+    color: var(--bone);
+    line-height: 0.78;
+    margin-bottom: 50px;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    font-weight: 400;
+    opacity: 0.92;
+  }
+  .footer-socials {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--line);
+  }
+  .footer-socials a {
+    color: var(--bone);
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    padding: 4px 0;
+    border-bottom: 1px solid transparent;
+    opacity: 0.75;
+  }
+  .footer-socials a:hover {
+    opacity: 1;
+    border-bottom-color: var(--gold);
+    color: var(--gold);
+  }
+  .footer-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    opacity: 0.45;
+    line-height: 1.8;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* === REVEAL === */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1s cubic-bezier(.2,.8,.2,1), transform 1s cubic-bezier(.2,.8,.2,1);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="top-bar-track">
+    <span>★ Grand Jury · Best Florida Feature 2025</span><span class="div">/</span>
+    <span>The First Skimboarding Film in History</span><span class="div">/</span>
+    <span>9.3 / 10 · IMDb</span><span class="div">/</span>
+    <span>Pinellas County · Florida</span><span class="div">/</span>
+    <span>A Film by Jadon Cal</span><span class="div">/</span>
+    <span>★ Grand Jury · Best Florida Feature 2025</span><span class="div">/</span>
+    <span>The First Skimboarding Film in History</span><span class="div">/</span>
+    <span>9.3 / 10 · IMDb</span><span class="div">/</span>
+    <span>Pinellas County · Florida</span><span class="div">/</span>
+    <span>A Film by Jadon Cal</span><span class="div">/</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#trailer">Trailer</a>
+  <a href="#film">Film</a>
+  <a href="#team">Cast & Crew</a>
+  <a href="#merch">Shop</a>
+  <a href="#watch">Watch</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-sun"></div>
+  <div class="hero-ocean">
+    <div class="hero-water"></div>
+    <div class="hero-shimmer"></div>
+    <div class="hero-waves">
+      <svg viewBox="0 0 2400 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path class="wave-path-1" d="M0,180 Q300,120 600,150 T1200,140 T1800,160 T2400,150 L2400,300 L0,300 Z" fill="#1a3d4a" opacity="0.85"/>
+        <path class="wave-path-2" d="M0,210 Q400,170 800,200 T1600,190 T2400,200 L2400,300 L0,300 Z" fill="#0a1f28" opacity="0.7"/>
+        <path class="wave-path-3" d="M0,240 Q300,225 600,235 T1200,235 T1800,240 T2400,235 L2400,300 L0,300 Z" fill="#15110b" opacity="0.95"/>
+      </svg>
+    </div>
+  </div>
+  <div class="hero-sand"></div>
+
+  <!-- palm fronds -->
+  <div class="hero-palm-left">
+    <svg viewBox="0 0 280 540" xmlns="http://www.w3.org/2000/svg">
+      <g fill="#0a0907" opacity="0.85">
+        <!-- trunk -->
+        <path d="M40,0 Q42,200 50,540 L70,540 Q62,200 60,0 Z"/>
+        <!-- fronds top -->
+        <path d="M50,40 Q120,20 200,60 Q170,68 100,72 Q70,70 50,68 Z"/>
+        <path d="M50,40 Q140,55 240,90 Q200,90 130,82 Q80,75 50,68 Z"/>
+        <path d="M50,40 Q90,80 130,180 Q105,140 80,90 Q60,60 50,40 Z"/>
+        <path d="M50,40 Q70,90 70,200 Q55,140 48,80 Q45,55 50,40 Z"/>
+        <path d="M50,40 Q40,90 30,180 Q35,130 38,80 Q42,55 50,40 Z"/>
+        <path d="M50,40 Q20,70 -20,90 Q15,75 35,65 Q45,55 50,40 Z"/>
+      </g>
+    </svg>
+  </div>
+  <div class="hero-palm-right">
+    <svg viewBox="0 0 280 540" xmlns="http://www.w3.org/2000/svg">
+      <g fill="#0a0907" opacity="0.85">
+        <path d="M40,0 Q42,200 50,540 L70,540 Q62,200 60,0 Z"/>
+        <path d="M50,40 Q120,20 200,60 Q170,68 100,72 Q70,70 50,68 Z"/>
+        <path d="M50,40 Q140,55 240,90 Q200,90 130,82 Q80,75 50,68 Z"/>
+        <path d="M50,40 Q90,80 130,180 Q105,140 80,90 Q60,60 50,40 Z"/>
+        <path d="M50,40 Q70,90 70,200 Q55,140 48,80 Q45,55 50,40 Z"/>
+        <path d="M50,40 Q40,90 30,180 Q35,130 38,80 Q42,55 50,40 Z"/>
+        <path d="M50,40 Q20,70 -20,90 Q15,75 35,65 Q45,55 50,40 Z"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-top">
+      <div class="hero-credit">
+        <strong>A FILM BY</strong> JADON CAL<br>
+        <strong>WITH</strong> DAVID HAMZIK · MG BARNES · NICK MCCALLUM
+      </div>
+      <div class="hero-laurel">
+        Grand Jury Award<br>Best Florida Feature<br>Gasparilla International Film Festival
+      </div>
+    </div>
+
+    <div class="hero-title-block">
+      <p class="hero-tag">A skimboarding sports drama from the shores of Pinellas County.</p>
+      <h1 class="title">OFF<br>RIP</h1>
+      <div class="title-tagline">Shred or Be Shredded</div>
+    </div>
+
+    <div class="hero-bottom">
+      <p class="hero-sub">A young skimboarder fights to keep his family afloat — through tournaments, the drug scene, first love, and the brotherhood of the shoreline. The first skimboarding film in cinema history.</p>
+      <div class="hero-ctas">
+        <a href="#trailer" class="btn btn-solid"><span>▶ Watch Trailer</span></a>
+        <a href="#watch" class="btn"><span>Where to Stream →</span></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- TRAILER -->
+<section class="trailer-section" id="trailer">
+  <div class="trailer-grid">
+    <div class="trailer-frame reveal" id="trailerFrame" role="button" aria-label="Play trailer">
+      <div class="trailer-still"></div>
+      <div class="frame-figure">
+        <svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+          <ellipse cx="100" cy="225" rx="60" ry="4" fill="#0a0907" opacity="0.5"/>
+          <path d="M40,225 Q60,212 100,212 Q140,212 160,225 Q160,228 100,228 Q40,228 40,225 Z" fill="#0a0907"/>
+          <ellipse cx="100" cy="125" rx="13" ry="15" fill="#0a0907"/>
+          <path d="M85,140 Q88,135 100,135 Q112,135 115,140 L118,160 L82,160 Z" fill="#0a0907"/>
+          <path d="M82,160 L72,212 L88,213 L94,180 L106,180 L112,213 L128,212 L118,160 Z" fill="#0a0907"/>
+          <path d="M85,148 L65,170 L60,165 L80,145 Z" fill="#0a0907"/>
+          <path d="M115,148 L138,165 L142,170 L120,150 Z" fill="#0a0907"/>
+        </svg>
+      </div>
+      <div class="frame-bars"></div>
+      <div class="frame-meta">
+        <span class="rec-dot"></span>
+        <span>REC</span>
+        <span>·</span>
+        <span>35MM</span>
+      </div>
+      <div class="frame-time">01:51:00</div>
+      <div class="play-circle"></div>
+    </div>
+    <div class="trailer-info reveal">
+      <span class="label">The Trailer</span>
+      <h2>Reach <em>new</em> heights.</h2>
+      <p>Four years in the making. Filmed on the beaches of Pinellas County — the same shores destroyed by the 2024 hurricanes.</p>
+      <p>Off Rip is a love letter and a time capsule. A coming-of-age story about a kid who has to grow up faster than the tide.</p>
+      <div class="meta-row">
+        <span><strong>RUN</strong>1H 51M</span>
+        <span><strong>RATED</strong>TV-MA</span>
+        <span><strong>YEAR</strong>2025</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHORELINE BREATH -->
+<section class="shoreline">
+  <div class="shoreline-waves">
+    <svg viewBox="0 0 2400 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path class="wave-path-1" d="M0,100 Q300,60 600,90 T1200,80 T1800,100 T2400,90 L2400,200 L0,200 Z" fill="#2d5f6e" opacity="0.6"/>
+      <path class="wave-path-2" d="M0,130 Q400,110 800,130 T1600,120 T2400,130 L2400,200 L0,200 Z" fill="#1a3d4a" opacity="0.5"/>
+    </svg>
+  </div>
+  <div class="shoreline-inner reveal">
+    <p class="shoreline-quote">
+      "A love letter and a <em>time capsule</em> — the salt-air specificity of <em>Floridian</em> beach culture, captured before the storm."
+    </p>
+    <div class="shoreline-cite">Pinellas County · Florida</div>
+  </div>
+</section>
+
+<div class="sand-strip"></div>
+
+<!-- FILM -->
+<section class="film" id="film">
+  <div class="film-grid">
+    <div class="poster reveal">
+      <div class="poster-bg"></div>
+      <div class="poster-sun"></div>
+      <div class="poster-portrait">
+        <svg viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+          <path d="M60,280 L60,200 Q60,180 75,170 Q88,165 100,165 Q112,165 125,170 Q140,180 140,200 L140,280 Z" fill="#0a0907" opacity="0.92"/>
+          <ellipse cx="100" cy="155" rx="22" ry="26" fill="#0a0907" opacity="0.92"/>
+          <path d="M82,140 Q85,125 100,122 Q115,125 118,140 Q116,138 110,135 Q105,134 100,134 Q95,134 90,135 Q84,138 82,140 Z" fill="#0a0907" opacity="0.92"/>
+        </svg>
+      </div>
+      <div class="poster-title">OFF<br>RIP</div>
+      <div class="poster-credits">
+        <strong>WRITTEN AND DIRECTED BY</strong>JADON CAL<br>
+        <strong>STARRING</strong>JADON CAL · DAVID HAMZIK<br>MG BARNES · NICK MCCALLUM<br>
+        <strong>PRODUCED BY</strong>JIM FITZPATRICK · NICOLE WEIDER
+      </div>
+      <div class="poster-tagline">Shred or Be Shredded</div>
+    </div>
+    <div class="film-text reveal">
+      <span class="label">The Film</span>
+      <h2>Write what you <em>know</em>.</h2>
+      <p class="lead">A high schooler trains for the skimboarding tournament that could save his family's house — while the world he grew up in pulls in every direction at once.</p>
+      <p>Shot in St. Petersburg, Florida — the town writer-director-star Jadon Cal grew up in. Off Rip is the first feature film ever made about skimboarding. Pro skimmers including Red Bull athlete Lucas Fink appear in the film, with boards by Zap Skimboards out of Venice, FL.</p>
+      <div class="pull-quote">
+        Hands down the most heartfelt journey I've seen in a while, with sick skimboarding footage that has never been seen with such vibrant colors.
+        <cite>— IMDb · 9.3/10</cite>
+      </div>
+      <p>Funny. Exciting. Specific to the salt-air specificity of Floridian beach culture — and universal in the family at its core.</p>
+    </div>
+  </div>
+</section>
+
+<!-- STILLS -->
+<section class="stills">
+  <div class="stills-header reveal">
+    <span class="label">From the Film</span>
+    <h2 class="section-title">Film <em>Stills</em></h2>
+  </div>
+  <div class="stills-strip">
+    <div class="still still-1"><span class="still-label">001 · Sunset Run</span></div>
+    <div class="still still-2"><span class="still-label">002 · The Lineup</span></div>
+    <div class="still still-3"><span class="still-label">003 · Golden Hour</span></div>
+    <div class="still still-4"><span class="still-label">004 · The Shore</span></div>
+    <div class="still still-5"><span class="still-label">005 · After Dark</span></div>
+    <div class="still still-6"><span class="still-label">006 · Salt Air</span></div>
+    <div class="still still-1"><span class="still-label">001 · Sunset Run</span></div>
+    <div class="still still-2"><span class="still-label">002 · The Lineup</span></div>
+    <div class="still still-3"><span class="still-label">003 · Golden Hour</span></div>
+    <div class="still still-4"><span class="still-label">004 · The Shore</span></div>
+    <div class="still still-5"><span class="still-label">005 · After Dark</span></div>
+    <div class="still still-6"><span class="still-label">006 · Salt Air</span></div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="team" id="team">
+  <div class="team-inner">
+    <div class="team-header reveal">
+      <span class="label">Cast & Crew</span>
+      <h2 class="section-title">The <em>People</em><br>Behind the Film</h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="team-photo" style="background: linear-gradient(135deg, #8b4a26, #2a1f12);"><span>JC</span></div>
+        <div class="team-name">Jadon Cal</div>
+        <div class="team-role">Writer · Director · Lead</div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-photo" style="background: linear-gradient(135deg, #2d5f6e, #15110b);"><span>DH</span></div>
+        <div class="team-name">David Hamzik</div>
+        <div class="team-role">Brent</div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-photo" style="background: linear-gradient(135deg, #d49050, #5c2e15);"><span>MB</span></div>
+        <div class="team-name">MG Barnes</div>
+        <div class="team-role">Jake</div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-photo" style="background: linear-gradient(135deg, #1a3d4a, #0a0907);"><span>NM</span></div>
+        <div class="team-name">Nick McCallum</div>
+        <div class="team-role">Cast</div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-photo" style="background: linear-gradient(135deg, #d4a04a, #5c2e15);"><span>MC</span></div>
+        <div class="team-name">Meghan Carrasquillo</div>
+        <div class="team-role">Cast</div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-photo" style="background: linear-gradient(135deg, #5a8a98, #2d5f6e);"><span>JF</span></div>
+        <div class="team-name">Jim Fitzpatrick</div>
+        <div class="team-role">Producer</div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-photo" style="background: linear-gradient(135deg, #5c2e15, #2a1f12);"><span>NW</span></div>
+        <div class="team-name">Nicole Weider</div>
+        <div class="team-role">Producer</div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-photo" style="background: linear-gradient(135deg, #d49050, #2d5f6e);"><span>LF</span></div>
+        <div class="team-name">Lucas Fink</div>
+        <div class="team-role">Pro Skimmer · Red Bull</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MERCH -->
+<section class="merch" id="merch">
+  <div class="merch-inner">
+    <div class="merch-header reveal">
+      <div>
+        <span class="label">The Drop</span>
+        <h2 class="section-title">Wear the <em>Film</em></h2>
+      </div>
+      <a href="#" class="btn"><span>View All →</span></a>
+    </div>
+    <div class="merch-grid">
+      <div class="product product-tee reveal">
+        <div class="product-img-wrap">
+          <div class="product-img"><div class="product-img-inner">OFF<br>RIP</div></div>
+        </div>
+        <div class="product-info">
+          <div>
+            <div class="product-name">Logo Tee</div>
+            <div class="product-meta">Heavyweight Cotton</div>
+          </div>
+          <div class="product-price">$28</div>
+        </div>
+      </div>
+      <div class="product product-cap reveal">
+        <div class="product-img-wrap">
+          <div class="product-img"><div class="product-img-inner">OR</div></div>
+        </div>
+        <div class="product-info">
+          <div>
+            <div class="product-name">Trucker Cap</div>
+            <div class="product-meta">Embroidered</div>
+          </div>
+          <div class="product-price">$32</div>
+        </div>
+      </div>
+      <div class="product product-poster reveal">
+        <div class="product-img-wrap">
+          <div class="product-img"><div class="product-img-inner">OFF<br>RIP</div></div>
+        </div>
+        <div class="product-info">
+          <div>
+            <div class="product-name">27×40 Poster</div>
+            <div class="product-meta">Theatrical Print</div>
+          </div>
+          <div class="product-price">$24</div>
+        </div>
+      </div>
+      <div class="product product-board reveal">
+        <div class="product-img-wrap">
+          <div class="product-img"><div class="product-img-inner">★</div></div>
+        </div>
+        <div class="product-info">
+          <div>
+            <div class="product-name">Sticker Pack</div>
+            <div class="product-meta">Set of 6</div>
+          </div>
+          <div class="product-price">$8</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STREAMING -->
+<section class="stream" id="watch">
+  <div class="stream-inner">
+    <div class="stream-header reveal">
+      <span class="label">Where to Watch</span>
+      <h2 class="section-title">Stream <em>Now</em></h2>
+      <p class="stream-sub">Available on all major platforms — wherever you watch the films you love.</p>
+    </div>
+    <div class="stream-grid reveal">
+      <a href="#" class="stream-btn"><span>Apple TV</span><span class="arrow">→</span></a>
+      <a href="#" class="stream-btn"><span>Prime Video</span><span class="arrow">→</span></a>
+      <a href="https://watch.plex.tv/movie/off-rip" class="stream-btn"><span>Plex</span><span class="arrow">→</span></a>
+      <a href="#" class="stream-btn"><span>YouTube</span><span class="arrow">→</span></a>
+      <a href="#" class="stream-btn"><span>Tubi</span><span class="arrow">→</span></a>
+      <a href="https://letterboxd.com/film/off-rip/" class="stream-btn"><span>Letterboxd</span><span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- EMAIL CTA — sunset shoreline -->
+<section class="email-cta">
+  <div class="email-cta-waves">
+    <svg viewBox="0 0 2400 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path class="wave-path-1" d="M0,100 Q300,70 600,90 T1200,90 T1800,100 T2400,90 L2400,200 L0,200 Z" fill="#0a1f28" opacity="0.7"/>
+      <path class="wave-path-2" d="M0,130 Q400,115 800,130 T1600,125 T2400,130 L2400,200 L0,200 Z" fill="#15110b" opacity="0.85"/>
+    </svg>
+  </div>
+  <div class="email-cta-inner">
+    <span class="label">Stay Close</span>
+    <h2 class="section-title">Join the <em>Lineup</em></h2>
+    <p>Tour dates, screenings, and the next film from Jadon Cal — direct to your inbox.</p>
+    <form class="email-form" id="emailForm" onsubmit="event.preventDefault(); document.getElementById('emailSuccess').classList.add('show'); this.reset();">
+      <input type="email" required placeholder="your email address" />
+      <button type="submit">Subscribe →</button>
+    </form>
+    <div class="email-success" id="emailSuccess">— You're in. See you on the sand.</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-title">OFF RIP</div>
+  <div class="footer-socials">
+    <a href="https://www.instagram.com/offripskim/" target="_blank">Instagram</a>
+    <a href="https://www.imdb.com/title/tt12643976/" target="_blank">IMDb</a>
+    <a href="https://letterboxd.com/film/off-rip/" target="_blank">Letterboxd</a>
+    <a href="mailto:hello@offripmovie.com">Press</a>
+  </div>
+  <div class="footer-meta">
+    © 2025 Off Rip Movie LLC · All Rights Reserved<br>
+    A Film by Jadon Cal · Made in Pinellas County · Florida
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('in');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  let lastScroll = 0;
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    const cur = window.scrollY;
+    if (cur > lastScroll && cur > 200) {
+      nav.classList.add('hide');
+    } else {
+      nav.classList.remove('hide');
+    }
+    lastScroll = cur;
+  });
+
+  document.getElementById('trailerFrame').addEventListener('click', () => {
+    alert('▶ Trailer would open here. Drop in your YouTube/Vimeo embed.');
+  });
+</script>
+
+</body>
+</html>
