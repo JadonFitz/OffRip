@@ -1,0 +1,15 @@
+{
+  "name": "off-rip",
+  "local_port": 57579,
+  "entrypoint": "bun run dev",
+  "publish": {
+    "label": "off-rip",
+    "type": "http",
+    "entrypoint": "bun run prod",
+    "published_port": 52144,
+    "env": {
+      "NODE_ENV": "production",
+      "ZO_CLIENT_IDENTITY_TOKEN": "none"
+    }
+  }
+}

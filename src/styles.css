@@ -1,0 +1,4 @@
+/* Base reset — all styles handled in JSX style objects for portability */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
