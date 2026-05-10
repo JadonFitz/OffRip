@@ -426,6 +426,25 @@ export default function Home() {
           border: 1px solid var(--line);
         }
         .press-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .press-desc {
+          max-width: 760px;
+          margin: 32px auto 0;
+          text-align: left;
+          font-size: 15px;
+          line-height: 1.75;
+          color: rgba(240,230,210,0.72);
+        }
+        .press-desc strong { color: var(--gold); font-weight: 500; }
+        .press-source {
+          display: inline-block;
+          margin-top: 20px;
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 10px;
+          letter-spacing: 0.25em;
+          text-transform: uppercase;
+          color: var(--gold);
+          opacity: 0.7;
+        }
         .shoreline {
           position: relative;
           padding: 140px 24px;
@@ -922,13 +941,20 @@ export default function Home() {
           <h2 className="section-title">Press <em>Coverage</em></h2>
           <div className="press-embed">
             <iframe
-              id="nxs-video-iframe-12"
-              src="https://redir1.wfla.com/nxs-video/vid-anvato-10171686/embed/?autoplay=0&injected_via=embed&post_id=2601156"
+              src="https://www.youtube.com/embed/4_cJfKvtuvo?rel=0"
+              title="Off Rip — WFLA Bloom Tampa Bay Coverage"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
-              loading="lazy"
-              title="Off Rip — WFLA News Coverage"
-              rel="nofollow"
             />
+          </div>
+          <div className="press-desc">
+            <p>
+              After <strong>Hurricanes Helene and Milton</strong> tore through the coastlines of Pinellas County, Florida — the very beaches where <em>Off Rip</em> was filmed — the cast and crew knew they had to come back. Writer-director <strong>Jadon Cal Fitzpatrick</strong>, cinematographer and producer <strong>Jake Jalbert</strong>, and actress <strong>Meghan Carrasquillo</strong> sat down with <em>Bloom Tampa Bay</em> on WFLA News Channel 8 to talk about the film, the community that raised it, and why they returned to host an exclusive Florida screening doubling as a <strong>hurricane relief fundraiser</strong>.
+            </p>
+            <p style={{ marginTop: '14px' }}>
+              <em>Off Rip</em> — the first skimboarding feature film ever made for the big screen — was shot entirely on location along the shores of Pinellas County. When the storms hit, giving back wasn't a question. The screening brought together fans, local supporters, and the filmmaking team for a night of film and community, with all proceeds going toward hurricane recovery efforts for the neighborhoods that gave the movie its soul.
+            </p>
+            <span className="press-source">WFLA News Channel 8 · Bloom Tampa Bay · Tampa, FL</span>
           </div>
         </div>
       </section>
