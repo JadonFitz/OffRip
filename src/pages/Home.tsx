@@ -937,7 +937,7 @@ export default function Home() {
       {/* PRESS */}
       <section className="press-section">
         <div className="press-inner">
-          <span className="label">As Seen On</span>
+          <span className="label">News &amp; Updates</span>
           <h2 className="section-title">Press <em>Coverage</em></h2>
           <div className="press-embed">
             <iframe
