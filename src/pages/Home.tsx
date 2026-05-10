@@ -395,6 +395,37 @@ export default function Home() {
           z-index: 2;
           cursor: pointer;
         }
+        .trailer-section {
+          padding: 100px 24px;
+          background: var(--black);
+          text-align: center;
+          border-top: 1px solid var(--line);
+        }
+        .trailer-inner { max-width: 960px; margin: 0 auto; }
+        .trailer-inner .section-title { margin-top: 12px; margin-bottom: 40px; }
+        .trailer-embed {
+          position: relative;
+          padding-bottom: 56.25%;
+          height: 0;
+          overflow: hidden;
+          border: 1px solid var(--line);
+        }
+        .trailer-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .press-section {
+          padding: 100px 24px;
+          background: var(--ink);
+          text-align: center;
+        }
+        .press-inner { max-width: 960px; margin: 0 auto; }
+        .press-inner .section-title { margin-top: 12px; margin-bottom: 40px; }
+        .press-embed {
+          position: relative;
+          padding-bottom: 56.25%;
+          height: 0;
+          overflow: hidden;
+          border: 1px solid var(--line);
+        }
+        .press-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         .shoreline {
           position: relative;
           padding: 140px 24px;
@@ -450,7 +481,6 @@ export default function Home() {
         @media (max-width: 900px) { .film-grid { grid-template-columns: 1fr; gap: 40px; } }
         .poster {
           position: relative;
-          aspect-ratio: 2/3;
           overflow: hidden;
           border-radius: 4px;
         }
@@ -593,7 +623,7 @@ export default function Home() {
           display: flex;
           gap: 4px;
           width: max-content;
-          animation: strip 60s linear infinite;
+          animation: strip 120s linear infinite;
         }
         @keyframes strip { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         .still {
@@ -670,6 +700,7 @@ export default function Home() {
           z-index: 1;
           pointer-events: none;
         }
+        .team-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; z-index: 0; }
         .team-card:hover .team-photo { transform: translateY(-4px); }
         .team-name { font-family: 'Anton', sans-serif; font-size: 22px; text-transform: uppercase; letter-spacing: -0.01em; color: var(--bone); margin-bottom: 4px; font-weight: 400; line-height: 1.05; }
         .team-role { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--gold); letter-spacing: 0.25em; text-transform: uppercase; opacity: 0.85; }
@@ -788,7 +819,7 @@ export default function Home() {
           <span className="div">✦</span>
           <span>First Feature Film About Skimboarding in Cinema History</span>
           <span className="div">✦</span>
-          <span>Starring Jadon Cal, David Hamzik, MG Barnes</span>
+          <span>Starring Jadon Cal Fitzpatrick, David Hamzik, MG Barnes</span>
           <span className="div">✦</span>
           <span>Now Streaming on Plex, Prime Video, Apple TV</span>
           <span className="div">✦</span>
@@ -796,7 +827,7 @@ export default function Home() {
           <span className="div">✦</span>
           <span>First Feature Film About Skimboarding in Cinema History</span>
           <span className="div">✦</span>
-          <span>Starring Jadon Cal, David Hamzik, MG Barnes</span>
+          <span>Starring Jadon Cal Fitzpatrick, David Hamzik, MG Barnes</span>
           <span className="div">✦</span>
           <span>Now Streaming on Plex, Prime Video, Apple TV</span>
         </div>
@@ -841,7 +872,7 @@ export default function Home() {
           <div className="hero-top">
             <div className="hero-credit">
               <strong>OFF RIP</strong><br/>
-              Written &amp; Directed by Jadon Cal<br/>
+              Written &amp; Directed by Jadon Cal Fitzpatrick<br/>
               A New Terrain Creative Production
             </div>
             <div className="hero-laurel">
@@ -858,12 +889,46 @@ export default function Home() {
 
           <div className="hero-bottom">
             <p className="hero-sub">
-              A high schooler trains for the skimboarding tournament that could save his family's house — while the world he grew up in pulls in every direction at once.
+              A young skim-boarder supporting his single mother fights against all odds to become the man his family has never known but has always needed, pushing through trials within friendships, the drug scene, relationships, and competition.
             </p>
             <div className="hero-ctas">
               <a href="#watch" className="btn btn-solid btn-lg"><span>Watch Now</span></a>
               <a href="#film" className="btn btn-lg"><span>About the Film</span></a>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TRAILER */}
+      <section className="trailer-section">
+        <div className="trailer-inner">
+          <span className="label">Official Trailer</span>
+          <h2 className="section-title">Watch the <em>Trailer</em></h2>
+          <div className="trailer-embed">
+            <iframe
+              src="https://www.youtube.com/embed/9eEiEanqUXg?rel=0"
+              title="Off Rip — Official Trailer"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* PRESS */}
+      <section className="press-section">
+        <div className="press-inner">
+          <span className="label">As Seen On</span>
+          <h2 className="section-title">Press <em>Coverage</em></h2>
+          <div className="press-embed">
+            <iframe
+              id="nxs-video-iframe-12"
+              src="https://redir1.wfla.com/nxs-video/vid-anvato-10171686/embed/?autoplay=0&injected_via=embed&post_id=2601156"
+              allowFullScreen
+              loading="lazy"
+              title="Off Rip — WFLA News Coverage"
+              rel="nofollow"
+            />
           </div>
         </div>
       </section>
@@ -890,28 +955,13 @@ export default function Home() {
       <section className="film" id="film">
         <div className="film-grid">
           <div className="poster">
-            <div className="poster-bg" />
-            <div className="poster-sun" />
-            <div className="poster-portrait">
-              <svg viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
-                <path d="M60,280 L60,200 Q60,180 75,170 Q88,165 100,165 Q112,165 125,170 Q140,180 140,200 L140,280 Z" fill="#0a0907" opacity="0.92"/>
-                <ellipse cx="100" cy="155" rx="22" ry="26" fill="#0a0907" opacity="0.92"/>
-                <path d="M82,140 Q85,125 100,122 Q115,125 118,140 Q116,138 110,135 Q105,134 100,134 Q95,134 90,135 Q84,138 82,140 Z" fill="#0a0907" opacity="0.92"/>
-              </svg>
-            </div>
-            <div className="poster-title">OFF<br/>RIP</div>
-            <div className="poster-credits">
-              <strong>WRITTEN AND DIRECTED BY</strong>JADON CAL<br/>
-              <strong>STARRING</strong>JADON CAL · DAVID HAMZIK<br/>MG BARNES · NICK MCCALLUM<br/>
-              <strong>PRODUCED BY</strong>JIM FITZPATRICK · NICOLE WEIDER
-            </div>
-            <div className="poster-tagline">Shred or Be Shredded</div>
+            <img src="/images/3x4 Portrait.png" alt="Off Rip — Official Poster" style={{ width: '100%', height: 'auto', display: 'block' }} />
           </div>
           <div className="film-text">
             <span className="label">The Film</span>
-            <h2>Write what you <em>know</em>.</h2>
-            <p className="lead">A high schooler trains for the skimboarding tournament that could save his family's house — while the world he grew up in pulls in every direction at once.</p>
-            <p>Shot in St. Petersburg, Florida — the town writer-director-star Jadon Cal grew up in. Off Rip is the first feature film ever made about skimboarding. Pro skimmers including Red Bull athlete Lucas Fink appear in the film, with boards by Zap Skimboards out of Venice, FL.</p>
+            <h2>A Story of <em>Perseverance</em>.</h2>
+            <p className="lead">A young skim-boarder supporting his single mother fights against all odds to become the man his family has never known but has always needed, pushing through trials within friendships, the drug scene, relationships, and competition.</p>
+            <p>Shot in St. Petersburg, Florida — the town writer-director-star Jadon Cal Fitzpatrick grew up in. Off Rip is the first feature film ever made about skimboarding. Pro skimmers including Red Bull athlete Lucas Fink appear in the film, with boards by Zap Skimboards out of Venice, FL.</p>
             <div className="pull-quote">
               Hands down the most heartfelt journey I've seen in a while, with sick skimboarding footage that has never been seen with such vibrant colors.
               <cite>— IMDb · 9.3/10</cite>
@@ -928,9 +978,34 @@ export default function Home() {
           <h2 className="section-title">Film <em>Stills</em></h2>
         </div>
         <div className="stills-strip">
-          {["still-1","still-2","still-3","still-4","still-5","still-6","still-1","still-2","still-3","still-4","still-5","still-6"].map((c, i) => (
-            <div key={i} className={`still ${c}`}>
-              <span className="still-label">{String(i+1).padStart(3,"0")} · {[ "Sunset Run","The Lineup","Golden Hour","The Shore","After Dark","Salt Air"][i%6]}</span>
+          {[
+            { file: "Best%20Moments_5.11.1.jpg",      label: "001" },
+            { file: "Best%20Moments_5.65.1.jpg",      label: "002" },
+            { file: "Best%20Moments_5.92.1.jpg",      label: "003" },
+            { file: "Best%20Moments_5.141.1.jpg",     label: "004" },
+            { file: "Best%20Moments_5.182.1.jpg",     label: "005" },
+            { file: "Best%20Moments_5.242.1.jpg",     label: "006" },
+            { file: "Best%20Moments_5.382.1.jpg",     label: "007" },
+            { file: "Best%20Moments_5.581.1.jpg",     label: "008" },
+            { file: "Best%20Moments_5.883.1.jpg",     label: "009" },
+            { file: "Best%20Moments_5.1022.1.jpg",    label: "010" },
+            { file: "Best%20Moments_5.1050.1.jpg",    label: "011" },
+            { file: "additional%20stills_1.11.1.jpg", label: "012" },
+            { file: "Best%20Moments_5.11.1.jpg",      label: "001" },
+            { file: "Best%20Moments_5.65.1.jpg",      label: "002" },
+            { file: "Best%20Moments_5.92.1.jpg",      label: "003" },
+            { file: "Best%20Moments_5.141.1.jpg",     label: "004" },
+            { file: "Best%20Moments_5.182.1.jpg",     label: "005" },
+            { file: "Best%20Moments_5.242.1.jpg",     label: "006" },
+            { file: "Best%20Moments_5.382.1.jpg",     label: "007" },
+            { file: "Best%20Moments_5.581.1.jpg",     label: "008" },
+            { file: "Best%20Moments_5.883.1.jpg",     label: "009" },
+            { file: "Best%20Moments_5.1022.1.jpg",    label: "010" },
+            { file: "Best%20Moments_5.1050.1.jpg",    label: "011" },
+            { file: "additional%20stills_1.11.1.jpg", label: "012" },
+          ].map((s, i) => (
+            <div key={i} className="still" style={{ backgroundImage: `url('/images/${s.file}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+              <span className="still-label">{s.label}</span>
             </div>
           ))}
         </div>
@@ -945,17 +1020,22 @@ export default function Home() {
           </div>
           <div className="team-grid">
             {[
-              { initials: "JC", name: "Jadon Cal", role: "Writer · Director · Lead", bg: "linear-gradient(135deg, #8b4a26, #2a1f12)" },
-              { initials: "DH", name: "David Hamzik", role: "Brent", bg: "linear-gradient(135deg, #2d5f6e, #15110b)" },
-              { initials: "MB", name: "MG Barnes", role: "Jake", bg: "linear-gradient(135deg, #d49050, #5c2e15)" },
-              { initials: "NM", name: "Nick McCallum", role: "Cast", bg: "linear-gradient(135deg, #1a3d4a, #0a0907)" },
-              { initials: "MC", name: "Meghan Carrasquillo", role: "Cast", bg: "linear-gradient(135deg, #d4a04a, #5c2e15)" },
-              { initials: "JF", name: "Jim Fitzpatrick", role: "Producer", bg: "linear-gradient(135deg, #5a8a98, #2d5f6e)" },
-              { initials: "NW", name: "Nicole Weider", role: "Producer", bg: "linear-gradient(135deg, #5c2e15, #2a1f12)" },
-              { initials: "LF", name: "Lucas Fink", role: "Pro Skimmer · Red Bull", bg: "linear-gradient(135deg, #d49050, #2d5f6e)" },
-            ].map(({ initials, name, role, bg }) => (
+              { initials: "JC", name: "Jadon Cal Fitzpatrick",           role: "Writer · Director · Lead",        bg: "linear-gradient(135deg, #8b4a26, #2a1f12)", photo: "/images/cast/jadon-cal.jpg" },
+              { initials: "JJ", name: "Jake Jalbert",                  role: "Cinematographer · Producer",      bg: "linear-gradient(135deg, #2d5f6e, #0a1f28)", photo: null },
+              { initials: "DH", name: "David Hamzik",        role: "Brent",                     bg: "linear-gradient(135deg, #2d5f6e, #15110b)", photo: null },
+              { initials: "MB", name: "MG Barnes",           role: "Jake",                      bg: "linear-gradient(135deg, #d49050, #5c2e15)", photo: "/images/cast/mg-barnes.jpg" },
+              { initials: "NM", name: "Nick McCallum",       role: "Pops",                      bg: "linear-gradient(135deg, #1a3d4a, #0a0907)", photo: "/images/cast/nick-mccallum.jpg" },
+              { initials: "MC", name: "Meghan Carrasquillo", role: "Rosie",                     bg: "linear-gradient(135deg, #d4a04a, #5c2e15)", photo: "/images/cast/meghan-carrasquillo.jpg" },
+              { initials: "JF", name: "Jim Fitzpatrick",     role: "Producer",                  bg: "linear-gradient(135deg, #5a8a98, #2d5f6e)", photo: "/images/cast/jim-fitzpatrick.jpg" },
+              { initials: "NW", name: "Nicole Weider",       role: "Producer",                  bg: "linear-gradient(135deg, #5c2e15, #2a1f12)", photo: "/images/cast/nicole-weider.jpg" },
+              { initials: "LF", name: "Lucas Fink",               role: "Pro Skimmer · Red Bull",      bg: "linear-gradient(135deg, #d49050, #2d5f6e)", photo: "/images/cast/lucas-fink.jpg" },
+              { initials: "JK", name: "Jodi Knotts-Fitzpatrick", role: "Line Producer",               bg: "linear-gradient(135deg, #5a8a98, #15110b)", photo: null },
+              { initials: "JA", name: "Jeff Alpert",              role: "Co-Executive Producer",       bg: "linear-gradient(135deg, #5c2e15, #0a0907)", photo: null },
+            ].map(({ initials, name, role, bg, photo }) => (
               <div key={name} className="team-card">
-                <div className="team-photo" style={{ background: bg }}><span>{initials}</span></div>
+                <div className="team-photo" style={{ background: bg }}>
+                  {photo ? <img src={photo} alt={name} /> : <span>{initials}</span>}
+                </div>
                 <div className="team-name">{name}</div>
                 <div className="team-role">{role}</div>
               </div>
@@ -1037,7 +1117,7 @@ export default function Home() {
         <div className="email-cta-inner">
           <span className="label">Stay Close</span>
           <h2 className="section-title">Join the <em>Lineup</em></h2>
-          <p>Tour dates, screenings, and the next film from Jadon Cal — direct to your inbox.</p>
+          <p>Tour dates, screenings, and the next film from Jadon Cal Fitzpatrick — direct to your inbox.</p>
           <form className="email-form" onSubmit={(e) => { e.preventDefault(); const s = e.currentTarget.querySelector(".email-success") as HTMLElement; if(s) s.classList.add("show"); e.currentTarget.reset(); }}>
             <input type="email" required placeholder="your email address" />
             <button type="submit">Subscribe →</button>
@@ -1057,7 +1137,7 @@ export default function Home() {
         </div>
         <div className="footer-meta">
           © 2025 Off Rip Movie LLC · All Rights Reserved<br/>
-          A Film by Jadon Cal · Made in Pinellas County · Florida
+          A Film by Jadon Cal Fitzpatrick · Made in Pinellas County · Florida
         </div>
       </footer>
     </>
