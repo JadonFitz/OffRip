@@ -455,10 +455,15 @@ export default function Home() {
           position: absolute;
           top: 0;
           left: 0;
-          width: 100%;
+          width: 200%;
           height: 100%;
           pointer-events: none;
           opacity: 0.4;
+        }
+        .shoreline-waves svg {
+          width: 100%;
+          height: 100%;
+          display: block;
         }
         .shoreline-inner { max-width: 760px; margin: 0 auto; position: relative; text-align: center; }
         .shoreline-quote {
@@ -780,9 +785,14 @@ export default function Home() {
           position: absolute;
           bottom: 0;
           left: 0;
-          width: 100%;
+          width: 200%;
           height: 100px;
           pointer-events: none;
+        }
+        .email-cta-waves svg {
+          width: 100%;
+          height: 100%;
+          display: block;
         }
         .email-cta-inner { max-width: 600px; margin: 0 auto; text-align: center; position: relative; }
         .email-cta p { font-size: 16px; color: rgba(240,230,210,0.65); margin: 16px 0 40px; line-height: 1.6; }
@@ -963,8 +973,8 @@ export default function Home() {
       <section className="shoreline">
         <div className="shoreline-waves">
           <svg viewBox="0 0 2400 200" preserveAspectRatio="none">
-            <path className="wave-path-1" d="M0,100 Q300,70 600,90 T1200,90 T1800,100 T2400,90 L2400,200 L0,200 Z" fill="#2d5f6e" opacity="0.4"/>
-            <path className="wave-path-2" d="M0,130 Q400,115 800,130 T1600,125 T2400,130 L2400,200 L0,200 Z" fill="#15110b" opacity="0.6"/>
+            <path className="wave-path-1" d="M0,100 Q150,75 300,100 T600,100 T900,100 T1200,100 T1500,100 T1800,100 T2100,100 T2400,100 L2400,200 L0,200 Z" fill="#2d5f6e" opacity="0.4"/>
+            <path className="wave-path-2" d="M0,140 Q150,160 300,140 T600,140 T900,140 T1200,140 T1500,140 T1800,140 T2100,140 T2400,140 L2400,200 L0,200 Z" fill="#15110b" opacity="0.6"/>
           </svg>
         </div>
         <div className="shoreline-inner">
@@ -1136,8 +1146,8 @@ export default function Home() {
       <section className="email-cta">
         <div className="email-cta-waves">
           <svg viewBox="0 0 2400 200" preserveAspectRatio="none">
-            <path className="wave-path-1" d="M0,100 Q300,70 600,90 T1200,90 T1800,100 T2400,90 L2400,200 L0,200 Z" fill="#0a1f28" opacity="0.7"/>
-            <path className="wave-path-2" d="M0,130 Q400,115 800,130 T1600,125 T2400,130 L2400,200 L0,200 Z" fill="#15110b" opacity="0.85"/>
+            <path className="wave-path-1" d="M0,100 Q150,75 300,100 T600,100 T900,100 T1200,100 T1500,100 T1800,100 T2100,100 T2400,100 L2400,200 L0,200 Z" fill="#0a1f28" opacity="0.7"/>
+            <path className="wave-path-2" d="M0,140 Q150,160 300,140 T600,140 T900,140 T1200,140 T1500,140 T1800,140 T2100,140 T2400,140 L2400,200 L0,200 Z" fill="#15110b" opacity="0.85"/>
           </svg>
         </div>
         <div className="email-cta-inner">
