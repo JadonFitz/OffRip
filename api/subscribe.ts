@@ -1,4 +1,6 @@
-import { subscribeEmail } from "../lib/subscribe";
+// Explicit .js extension: package.json sets "type": "module", and Node's ESM
+// resolver in the Vercel runtime will not infer it the way bundlers do.
+import { subscribeEmail } from "../lib/subscribe.js";
 
 /**
  * Vercel serverless function backing POST /api/subscribe in production.
