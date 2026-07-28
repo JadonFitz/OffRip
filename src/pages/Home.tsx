@@ -489,6 +489,7 @@ export default function Home() {
           line-height: 1.65;
           color: rgba(240,230,210,0.6);
         }
+        .podcast-sub em { font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--sand); }
         .podcast-embed {
           position: relative;
           padding-bottom: 56.25%;
@@ -1346,7 +1347,7 @@ export default function Home() {
           <span className="label">The Podcast</span>
           <h2 className="section-title">Off <em>Script</em></h2>
           <p className="podcast-sub">
-            Conversations from New Terrain Creative, hosted by Jadon Cal Fitzpatrick. New episodes on YouTube.
+            Conversations from New Terrain Creative, hosted by the <em>Off Rip</em> team. New episodes on YouTube.
           </p>
           <div className="podcast-embed">
             <iframe
