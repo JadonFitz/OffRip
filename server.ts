@@ -3,9 +3,24 @@ import type { ViteDevServer } from "vite";
 import { createServer as createViteServer } from "vite";
 import config from "./zosite.json";
 import { Hono } from "hono";
+import { subscribeEmail } from "./lib/subscribe";
 
 type Mode = "development" | "production";
 const app = new Hono();
+
+// API routes register first so they take precedence over the SPA catch-all.
+// In production on Vercel this same logic runs via api/subscribe.ts instead.
+app.post("/api/subscribe", async (c) => {
+  let email: unknown;
+  try {
+    ({ email } = await c.req.json());
+  } catch {
+    return c.json({ error: "Expected a JSON body." }, 400);
+  }
+
+  const { status, body } = await subscribeEmail(email);
+  return c.json(body, status);
+});
 
 const mode: Mode =
   process.env.NODE_ENV === "production" ? "production" : "development";

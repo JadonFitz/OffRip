@@ -1,8 +1,75 @@
 import { useState, useEffect, useRef } from "react";
 
+const STILLS = [
+  "Best Moments_5.11.1.jpg",
+  "Best Moments_5.65.1.jpg",
+  "Best Moments_5.92.1.jpg",
+  "Best Moments_5.141.1.jpg",
+  "Best Moments_5.182.1.jpg",
+  "Best Moments_5.242.1.jpg",
+  "Best Moments_5.382.1.jpg",
+  "Best Moments_5.581.1.jpg",
+  "Best Moments_5.883.1.jpg",
+  "Best Moments_5.1022.1.jpg",
+  "Best Moments_5.1050.1.jpg",
+  "additional stills_1.11.1.jpg",
+];
+
+/** Giveaway winner is drawn end of day, Aug 28 2026, Eastern (Pinellas County). */
+const GIVEAWAY_CLOSES = new Date("2026-08-28T23:59:59-04:00").getTime();
+
+function useCountdown(target: number) {
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const total = Math.max(0, Math.floor((target - now) / 1000));
+  return {
+    closed: target - now <= 0,
+    days: Math.floor(total / 86400),
+    hours: Math.floor((total % 86400) / 3600),
+    minutes: Math.floor((total % 3600) / 60),
+    seconds: total % 60,
+  };
+}
+
 export default function Home() {
   const [navHidden, setNavHidden] = useState(false);
   const lastScroll = useRef(0);
+  const countdown = useCountdown(GIVEAWAY_CLOSES);
+
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
+  const [error, setError] = useState("");
+
+  async function handleSubscribe(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("loading");
+    setError("");
+
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json().catch(() => ({}) as { error?: string });
+
+      if (res.ok) {
+        setStatus("ok");
+        setEmail("");
+      } else {
+        setStatus("error");
+        setError(data.error ?? "Something went wrong. Please try again.");
+      }
+    } catch {
+      setStatus("error");
+      setError("Couldn't reach the server. Please try again.");
+    }
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -212,28 +279,6 @@ export default function Home() {
           z-index: 0;
           background: linear-gradient(180deg, transparent 0%, rgba(21,17,11,0.7) 60%, var(--black) 100%);
         }
-        .hero-palm-left, .hero-palm-right {
-          position: absolute;
-          top: 0;
-          z-index: 0;
-          width: 280px;
-          height: 60%;
-          pointer-events: none;
-          opacity: 0.6;
-        }
-        .hero-palm-left { left: -40px; animation: sway 8s ease-in-out infinite; }
-        .hero-palm-right { right: -40px; animation: swayRight 8s ease-in-out infinite -4s; transform: scaleX(-1); }
-        @keyframes sway {
-          0%, 100% { transform: rotate(0deg); }
-          50% { transform: rotate(1.5deg); }
-        }
-        @keyframes swayRight {
-          0%, 100% { transform: scaleX(-1) rotate(0deg); }
-          50% { transform: scaleX(-1) rotate(1.5deg); }
-        }
-        @media (max-width: 720px) {
-          .hero-palm-left, .hero-palm-right { width: 160px; opacity: 0.4; }
-        }
         .hero::before {
           content: '';
           position: absolute;
@@ -334,6 +379,9 @@ export default function Home() {
           text-transform: uppercase;
           color: var(--gold);
           font-weight: 400;
+          text-shadow:
+            0 2px 4px rgba(10,9,7,0.55),
+            0 6px 20px rgba(10,9,7,0.45);
           opacity: 0;
           animation: fadeIn 1.4s cubic-bezier(.2,.8,.2,1) 0.6s forwards;
         }
@@ -426,6 +474,30 @@ export default function Home() {
           border: 1px solid var(--line);
         }
         .press-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .podcast-section {
+          padding: 120px 24px;
+          background: var(--black);
+          text-align: center;
+          border-top: 1px solid var(--line);
+        }
+        .podcast-inner { max-width: 960px; margin: 0 auto; }
+        .podcast-inner .section-title { margin-top: 12px; margin-bottom: 18px; }
+        .podcast-sub {
+          max-width: 560px;
+          margin: 0 auto 40px;
+          font-size: 16px;
+          line-height: 1.65;
+          color: rgba(240,230,210,0.6);
+        }
+        .podcast-embed {
+          position: relative;
+          padding-bottom: 56.25%;
+          height: 0;
+          overflow: hidden;
+          border: 1px solid var(--line);
+        }
+        .podcast-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .podcast-cta { margin-top: 32px; }
         .press-desc {
           max-width: 760px;
           margin: 32px auto 0;
@@ -656,6 +728,9 @@ export default function Home() {
           flex-shrink: 0;
           position: relative;
           overflow: hidden;
+          background-color: var(--ink);
+          background-size: cover;
+          background-position: center;
         }
         .still::after {
           content: '';
@@ -665,12 +740,6 @@ export default function Home() {
           mix-blend-mode: overlay;
           pointer-events: none;
         }
-        .still-1 { background: linear-gradient(135deg, #f4c878, #8b4a26 60%, #2a1f12); }
-        .still-2 { background: linear-gradient(180deg, #5a8a98 30%, #2d5f6e 70%, #1a3d4a); }
-        .still-3 { background: linear-gradient(180deg, #f4cc78 20%, #d49050 50%, #2a1f12); }
-        .still-4 { background: linear-gradient(180deg, #7ba6b3 30%, #d4bc8c 70%, #b89d68); }
-        .still-5 { background: linear-gradient(180deg, #8b4a26 20%, #2a1f12 70%, #15110b); }
-        .still-6 { background: linear-gradient(135deg, #d4bc8c 0%, #5a8a98 50%, #2d5f6e 100%); }
         .still-label {
           position: absolute;
           bottom: 12px;
@@ -729,35 +798,98 @@ export default function Home() {
         .team-name { font-family: 'Anton', sans-serif; font-size: 22px; text-transform: uppercase; letter-spacing: -0.01em; color: var(--bone); margin-bottom: 4px; font-weight: 400; line-height: 1.05; }
         .team-role { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--gold); letter-spacing: 0.25em; text-transform: uppercase; opacity: 0.85; }
         .merch { padding: 140px 24px; background: var(--ink); position: relative; }
-        .merch-inner { max-width: 1280px; margin: 0 auto; }
-        .merch-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 60px; flex-wrap: wrap; gap: 24px; }
-        .merch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 32px; }
-        .product { transition: all 0.4s cubic-bezier(.2,.8,.2,1); cursor: pointer; }
-        .product:hover .product-img-wrap { transform: translateY(-8px); }
-        .product-img-wrap { transition: transform 0.4s cubic-bezier(.2,.8,.2,1); margin-bottom: 18px; }
-        .product-img { aspect-ratio: 1; position: relative; overflow: hidden; background: var(--black); display: flex; align-items: center; justify-content: center; }
-        .product-img-inner { font-family: 'Anton', sans-serif; font-size: 48px; color: var(--bone); text-align: center; line-height: 0.9; letter-spacing: -0.02em; }
-        .product-img::after {
+        .merch-inner { max-width: 1180px; margin: 0 auto; }
+        .giveaway { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 64px; align-items: center; }
+        .giveaway-lead { font-size: 18px; line-height: 1.65; color: rgba(240,230,210,0.75); margin-top: 20px; max-width: 46ch; }
+        .giveaway-lead em { font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--sand); }
+        .giveaway-prize {
+          display: inline-flex;
+          align-items: center;
+          gap: 14px;
+          margin-top: 32px;
+          padding: 14px 22px 14px 20px;
+          border: 1px solid rgba(212,160,74,0.35);
+          background: rgba(212,160,74,0.06);
+          border-radius: 2px;
+        }
+        .giveaway-prize-amount { font-family: 'Anton', sans-serif; font-size: 46px; line-height: 0.9; color: var(--gold); letter-spacing: -0.02em; }
+        .giveaway-prize-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(240,230,210,0.6); line-height: 1.7; }
+        .giveaway-rules {
+          list-style: none;
+          counter-reset: rule;
+          margin-top: 34px;
+          border-top: 1px solid var(--line);
+        }
+        .giveaway-rules li {
+          counter-increment: rule;
+          position: relative;
+          padding: 16px 0 16px 42px;
+          border-bottom: 1px solid var(--line);
+          font-size: 15px;
+          line-height: 1.55;
+          color: rgba(240,230,210,0.62);
+        }
+        .giveaway-rules li::before {
+          content: counter(rule, decimal-leading-zero);
+          position: absolute;
+          left: 0;
+          top: 18px;
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 11px;
+          letter-spacing: 0.1em;
+          color: var(--gold);
+          opacity: 0.7;
+        }
+        .giveaway-rules strong { color: var(--bone); font-weight: 600; }
+        .giveaway-rules em { font-family: 'Cormorant Garamond', serif; font-style: italic; }
+        .giveaway-rules a { color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(212,160,74,0.4); }
+        .giveaway-rules a:hover { border-bottom-color: var(--gold); }
+        .giveaway-rules .tag {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 13px;
+          color: var(--gold);
+          letter-spacing: 0.02em;
+          white-space: nowrap;
+        }
+        .countdown { display: flex; gap: 10px; margin-top: 36px; }
+        .countdown-unit {
+          flex: 0 0 auto;
+          min-width: 74px;
+          padding: 14px 10px;
+          text-align: center;
+          background: rgba(240,230,210,0.04);
+          border: 1px solid var(--line);
+        }
+        .countdown-num { font-family: 'Anton', sans-serif; font-size: 34px; line-height: 1; color: var(--bone); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+        .countdown-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(240,230,210,0.45); margin-top: 8px; }
+        .countdown-closed {
+          margin-top: 36px;
+          font-family: 'Cormorant Garamond', serif;
+          font-style: italic;
+          font-size: 22px;
+          color: var(--gold);
+        }
+        .giveaway-deadline { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); opacity: 0.85; margin-top: 18px; }
+        .giveaway-cta { margin-top: 34px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+        .giveaway-note { font-size: 14px; color: rgba(240,230,210,0.45); line-height: 1.6; margin-top: 26px; max-width: 44ch; }
+        .giveaway-art { position: relative; }
+        .giveaway-art img { width: 100%; height: auto; display: block; border: 1px solid var(--line); }
+        .giveaway-art::after {
           content: '';
           position: absolute;
           inset: 0;
           background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.85 0 0 0 0 0.7 0 0 0 0.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
           mix-blend-mode: overlay;
-          z-index: 3;
           pointer-events: none;
         }
-        .product-tee .product-img { background: linear-gradient(135deg, var(--rust), var(--burnt)); }
-        .product-cap .product-img { background: linear-gradient(135deg, var(--ocean), var(--ocean-deep)); }
-        .product-poster .product-img { background: linear-gradient(135deg, var(--sand), var(--burnt)); }
-        .product-board .product-img { background: linear-gradient(135deg, var(--ocean-light), var(--ocean-deep)); }
-        .product-info { display: flex; justify-content: space-between; align-items: flex-start; }
-        .product-name { font-family: 'Anton', sans-serif; font-size: 18px; color: var(--bone); text-transform: uppercase; letter-spacing: -0.01em; }
-        .product-meta { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(240,230,210,0.5); letter-spacing: 0.15em; text-transform: uppercase; margin-top: 4px; }
-        .product-price { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--gold); letter-spacing: 0.05em; }
+        @media (max-width: 900px) {
+          .giveaway { grid-template-columns: 1fr; gap: 44px; }
+          .giveaway-art { order: -1; max-width: 420px; }
+        }
         .stream { padding: 140px 24px; background: var(--black); }
         .stream-inner { max-width: 900px; margin: 0 auto; text-align: center; }
         .stream-sub { font-size: 16px; color: rgba(240,230,210,0.6); margin-top: 12px; }
-        .stream-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 48px; }
+        .stream-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 48px auto 0; max-width: 640px; }
         .stream-btn {
           display: flex;
           justify-content: space-between;
@@ -796,6 +928,7 @@ export default function Home() {
         }
         .email-cta-inner { max-width: 600px; margin: 0 auto; text-align: center; position: relative; }
         .email-cta p { font-size: 16px; color: rgba(240,230,210,0.65); margin: 16px 0 40px; line-height: 1.6; }
+        .email-cta p em { font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--sand); }
         .email-form { display: flex; gap: 0; max-width: 480px; margin: 0 auto; }
         .email-form input {
           flex: 1;
@@ -823,42 +956,96 @@ export default function Home() {
           transition: all 0.3s;
           white-space: nowrap;
         }
-        .email-form button:hover { background: var(--gold); }
+        .email-form button:hover:not(:disabled) { background: var(--gold); }
+        .email-form button:disabled, .email-form input:disabled { opacity: 0.6; cursor: default; }
         .email-success {
           margin-top: 16px;
           font-family: 'Cormorant Garamond', serif;
           font-style: italic;
           font-size: 18px;
           color: var(--gold);
-          display: none;
         }
-        .email-success.show { display: block; }
+        .email-error {
+          margin-top: 16px;
+          font-family: 'Inter', sans-serif;
+          font-size: 14px;
+          color: #e0876a;
+        }
         footer { padding: 60px 24px; background: var(--ink); text-align: center; }
         .footer-title { font-family: 'Anton', sans-serif; font-size: 32px; color: var(--bone); letter-spacing: -0.02em; margin-bottom: 24px; }
         .footer-socials { display: flex; justify-content: center; gap: 32px; margin-bottom: 24px; flex-wrap: wrap; }
         .footer-socials a { color: rgba(240,230,210,0.6); text-decoration: none; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; transition: color 0.2s; }
         .footer-socials a:hover { color: var(--gold); }
         .footer-meta { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(240,230,210,0.3); letter-spacing: 0.2em; text-transform: uppercase; line-height: 2; }
+
+        /* ---- Mobile ---- */
+        @media (max-width: 720px) {
+          /* The nav pill can't fit five 18px-padded links on a phone. */
+          nav {
+            max-width: calc(100vw - 24px);
+            padding: 5px;
+            gap: 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+            justify-content: flex-start;
+          }
+          nav::-webkit-scrollbar { display: none; }
+          nav a { padding: 9px 12px; font-size: 11px; letter-spacing: 0.1em; white-space: nowrap; }
+
+          .film, .stills, .team, .merch, .stream,
+          .trailer-section, .press-section, .podcast-section { padding-left: 20px; padding-right: 20px; }
+          .film, .team, .merch, .stream { padding-top: 90px; padding-bottom: 90px; }
+          .trailer-section, .press-section, .podcast-section { padding-top: 90px; padding-bottom: 90px; }
+          .email-cta { padding: 90px 20px 80px; }
+
+          .still { width: 260px; }
+          .team-grid { grid-template-columns: repeat(2, 1fr); gap: 22px; }
+          .team-name { font-size: 18px; }
+
+          .giveaway-prize-amount { font-size: 38px; }
+          .giveaway-rules li { font-size: 14px; padding-left: 34px; }
+          .countdown { gap: 6px; }
+          .countdown-unit { flex: 1 1 0; min-width: 0; padding: 12px 4px; }
+          .countdown-num { font-size: 26px; }
+          .countdown-label { font-size: 8px; letter-spacing: 0.15em; }
+
+          /* Stacked so the 16px input never gets squeezed below tap size. */
+          .email-form { flex-direction: column; gap: 10px; }
+          .email-form input { border-right: 1px solid var(--line); }
+          .email-form button { padding: 15px 20px; }
+
+          .footer-socials { gap: 20px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          html { scroll-behavior: auto; }
+          body::before,
+          .stills-strip,
+          .top-bar-track,
+          .hero-sun,
+          .hero-shimmer,
+          .wave-path-1, .wave-path-2, .wave-path-3 { animation: none !important; }
+        }
       `}</style>
 
       {/* TOP BAR */}
       <div className="top-bar">
         <div className="top-bar-track">
-          <span>Best Florida Feature — Gasparilla International Film Festival 2025</span>
+          <span>Best Florida Feature at Gasparilla International Film Festival 2025</span>
           <span className="div">✦</span>
           <span>First Feature Film About Skimboarding in Cinema History</span>
           <span className="div">✦</span>
           <span>Starring Jadon Cal Fitzpatrick, David Hamzik, MG Barnes</span>
           <span className="div">✦</span>
-          <span>Now Streaming on Plex, Prime Video, Apple TV</span>
+          <span>Now Streaming on Apple TV and Prime Video</span>
           <span className="div">✦</span>
-          <span>Best Florida Feature — Gasparilla International Film Festival 2025</span>
+          <span>Best Florida Feature at Gasparilla International Film Festival 2025</span>
           <span className="div">✦</span>
           <span>First Feature Film About Skimboarding in Cinema History</span>
           <span className="div">✦</span>
           <span>Starring Jadon Cal Fitzpatrick, David Hamzik, MG Barnes</span>
           <span className="div">✦</span>
-          <span>Now Streaming on Plex, Prime Video, Apple TV</span>
+          <span>Now Streaming on Apple TV and Prime Video</span>
         </div>
       </div>
 
@@ -867,7 +1054,7 @@ export default function Home() {
         <a href="#film">The Film</a>
         <a href="#stills">Stills</a>
         <a href="#team">Cast &amp; Crew</a>
-        <a href="#merch">Merch</a>
+        <a href="#merch">Competition</a>
         <a href="#watch">Watch</a>
       </nav>
 
@@ -886,16 +1073,6 @@ export default function Home() {
           </div>
         </div>
         <div className="hero-sand" />
-        <div className="hero-palm-left">
-          <svg viewBox="0 0 280 420" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10,420 Q30,300 80,220 Q40,240 20,280 Q50,180 120,100 Q60,140 30,200 Q80,80 160,20 Q80,100 50,180 Q100,60 160,10 Q100,80 70,160 Q140,40 200,0 Q110,80 80,160 Q150,50 220,20 Q130,100 100,180 Q180,80 260,60 Q160,140 120,200 Q200,120 280,120 Q180,180 140,240 Q210,160 280,160 Q200,220 160,280 Q230,200 280,200 Q220,260 180,320 Q250,240 280,240" fill="#2a1f12" opacity="0.6"/>
-          </svg>
-        </div>
-        <div className="hero-palm-right">
-          <svg viewBox="0 0 280 420" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10,420 Q30,300 80,220 Q40,240 20,280 Q50,180 120,100 Q60,140 30,200 Q80,80 160,20 Q80,100 50,180 Q100,60 160,10 Q100,80 70,160 Q140,40 200,0 Q110,80 80,160 Q150,50 220,20 Q130,100 100,180 Q180,80 260,60 Q160,140 120,200 Q200,120 280,120 Q180,180 140,240 Q210,160 280,160 Q220,260 180,320 Q250,240 280,240 Q200,220 160,280 Q230,200 280,200 Q220,260 180,320 Q250,240 280,240" fill="#2a1f12" opacity="0.6"/>
-          </svg>
-        </div>
 
         <div className="hero-content">
           <div className="hero-top">
@@ -905,7 +1082,7 @@ export default function Home() {
               A New Terrain Creative Production
             </div>
             <div className="hero-laurel">
-              Winner — Best Florida Feature<br/>
+              Winner of Best Florida Feature<br/>
               Gasparilla International Film Festival 2025
             </div>
           </div>
@@ -936,7 +1113,7 @@ export default function Home() {
           <div className="trailer-embed">
             <iframe
               src="https://www.youtube.com/embed/9eEiEanqUXg?rel=0"
-              title="Off Rip — Official Trailer"
+              title="Off Rip Official Trailer"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
@@ -952,17 +1129,17 @@ export default function Home() {
           <div className="press-embed">
             <iframe
               src="https://www.youtube.com/embed/4_cJfKvtuvo?rel=0"
-              title="Off Rip — WFLA Bloom Tampa Bay Coverage"
+              title="Off Rip on WFLA Bloom Tampa Bay"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
           </div>
           <div className="press-desc">
             <p>
-              After <strong>Hurricanes Helene and Milton</strong> tore through the coastlines of Pinellas County, Florida — the very beaches where <em>Off Rip</em> was filmed — the cast and crew knew they had to come back. Writer-director <strong>Jadon Cal Fitzpatrick</strong>, cinematographer and producer <strong>Jake Jalbert</strong>, and actress <strong>Meghan Carrasquillo</strong> sat down with <em>Bloom Tampa Bay</em> on WFLA News Channel 8 to talk about the film, the community that raised it, and why they returned to host an exclusive Florida screening doubling as a <strong>hurricane relief fundraiser</strong>.
+              After <strong>Hurricanes Helene and Milton</strong> tore through the coastlines of Pinellas County, Florida, the very beaches where <em>Off Rip</em> was filmed, the cast and crew knew they had to come back. Writer-director <strong>Jadon Cal Fitzpatrick</strong>, cinematographer and producer <strong>Jake Jalbert</strong>, and actress <strong>Meghan Carrasquillo</strong> sat down with <em>Bloom Tampa Bay</em> on WFLA News Channel 8 to talk about the film, the community that raised it, and why they returned to host an exclusive Florida screening doubling as a <strong>hurricane relief fundraiser</strong>.
             </p>
             <p style={{ marginTop: '14px' }}>
-              <em>Off Rip</em> — the first skimboarding feature film ever made for the big screen — was shot entirely on location along the shores of Pinellas County. When the storms hit, giving back wasn't a question. The screening brought together fans, local supporters, and the filmmaking team for a night of film and community, with all proceeds going toward hurricane recovery efforts for the neighborhoods that gave the movie its soul.
+              <em>Off Rip</em>, the first skimboarding feature film ever made for the big screen, was shot entirely on location along the shores of Pinellas County. When the storms hit, giving back wasn't a question. The screening brought together fans, local supporters, and the filmmaking team for a night of film and community, with all proceeds going toward hurricane recovery efforts for the neighborhoods that gave the movie its soul.
             </p>
             <span className="press-source">WFLA News Channel 8 · Bloom Tampa Bay · Tampa, FL</span>
           </div>
@@ -979,7 +1156,7 @@ export default function Home() {
         </div>
         <div className="shoreline-inner">
           <p className="shoreline-quote">
-            "A love letter and a <em>time capsule</em> — the salt-air specificity of <em>Floridian</em> beach culture, captured before the storm."
+            "A love letter and a <em>time capsule</em>. The salt-air specificity of <em>Floridian</em> beach culture, captured before the storm."
           </p>
           <div className="shoreline-cite">Pinellas County · Florida</div>
         </div>
@@ -991,18 +1168,18 @@ export default function Home() {
       <section className="film" id="film">
         <div className="film-grid">
           <div className="poster">
-            <img src="/images/3x4 Portrait.png" alt="Off Rip — Official Poster" style={{ width: '100%', height: 'auto', display: 'block' }} />
+            <img src="/images/3x4 Portrait.png" alt="Off Rip Official Poster" style={{ width: '100%', height: 'auto', display: 'block' }} />
           </div>
           <div className="film-text">
             <span className="label">The Film</span>
             <h2>A Story of <em>Perseverance</em>.</h2>
-            <p className="lead">A young skim-boarder supporting his single mother fights against all odds to become the man his family has never known but has always needed, pushing through trials within friendships, the drug scene, relationships, and competition.</p>
-            <p>Shot in St. Petersburg, Florida — the town writer-director-star Jadon Cal Fitzpatrick grew up in. Off Rip is the first feature film ever made about skimboarding. Pro skimmers including Red Bull athlete Lucas Fink appear in the film, with boards by Zap Skimboards out of Venice, FL.</p>
+            <p className="lead">He's fighting to become the man his family has never known but has always needed, through friendships, the drug scene, relationships, and competition.</p>
+            <p>Shot in St. Petersburg, Florida, the town writer-director-star Jadon Cal Fitzpatrick grew up in. Off Rip is the first feature film ever made about skimboarding. Pro skimmers including Red Bull athlete Lucas Fink appear in the film, with boards by Zap Skimboards out of Venice, FL.</p>
             <div className="pull-quote">
               Hands down the most heartfelt journey I've seen in a while, with sick skimboarding footage that has never been seen with such vibrant colors.
-              <cite>— IMDb · 9.3/10</cite>
+              <cite>IMDb · 9.3/10</cite>
             </div>
-            <p>Funny. Exciting. Specific to the salt-air specificity of Floridian beach culture — and universal in the family at its core.</p>
+            <p>Funny. Exciting. Specific to the salt-air specificity of Floridian beach culture, and universal in the family at its core.</p>
           </div>
         </div>
       </section>
@@ -1014,34 +1191,17 @@ export default function Home() {
           <h2 className="section-title">Film <em>Stills</em></h2>
         </div>
         <div className="stills-strip">
-          {[
-            { file: "Best%20Moments_5.11.1.jpg",      label: "001" },
-            { file: "Best%20Moments_5.65.1.jpg",      label: "002" },
-            { file: "Best%20Moments_5.92.1.jpg",      label: "003" },
-            { file: "Best%20Moments_5.141.1.jpg",     label: "004" },
-            { file: "Best%20Moments_5.182.1.jpg",     label: "005" },
-            { file: "Best%20Moments_5.242.1.jpg",     label: "006" },
-            { file: "Best%20Moments_5.382.1.jpg",     label: "007" },
-            { file: "Best%20Moments_5.581.1.jpg",     label: "008" },
-            { file: "Best%20Moments_5.883.1.jpg",     label: "009" },
-            { file: "Best%20Moments_5.1022.1.jpg",    label: "010" },
-            { file: "Best%20Moments_5.1050.1.jpg",    label: "011" },
-            { file: "additional%20stills_1.11.1.jpg", label: "012" },
-            { file: "Best%20Moments_5.11.1.jpg",      label: "001" },
-            { file: "Best%20Moments_5.65.1.jpg",      label: "002" },
-            { file: "Best%20Moments_5.92.1.jpg",      label: "003" },
-            { file: "Best%20Moments_5.141.1.jpg",     label: "004" },
-            { file: "Best%20Moments_5.182.1.jpg",     label: "005" },
-            { file: "Best%20Moments_5.242.1.jpg",     label: "006" },
-            { file: "Best%20Moments_5.382.1.jpg",     label: "007" },
-            { file: "Best%20Moments_5.581.1.jpg",     label: "008" },
-            { file: "Best%20Moments_5.883.1.jpg",     label: "009" },
-            { file: "Best%20Moments_5.1022.1.jpg",    label: "010" },
-            { file: "Best%20Moments_5.1050.1.jpg",    label: "011" },
-            { file: "additional%20stills_1.11.1.jpg", label: "012" },
-          ].map((s, i) => (
-            <div key={i} className="still" style={{ backgroundImage: `url('/images/${s.file}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-              <span className="still-label">{s.label}</span>
+          {/* Listed once, rendered twice so the marquee loops seamlessly. */}
+          {[...STILLS, ...STILLS].map((file, i) => (
+            <div
+              key={i}
+              className="still"
+              style={{ backgroundImage: `url('/images/${encodeURIComponent(file)}')` }}
+              aria-hidden={i >= STILLS.length}
+            >
+              <span className="still-label">
+                {String((i % STILLS.length) + 1).padStart(3, "0")}
+              </span>
             </div>
           ))}
         </div>
@@ -1057,16 +1217,18 @@ export default function Home() {
           <div className="team-grid">
             {[
               { initials: "JC", name: "Jadon Cal Fitzpatrick",           role: "Writer · Director · Lead",        bg: "linear-gradient(135deg, #8b4a26, #2a1f12)", photo: "/images/cast/jadon-cal.jpg" },
-              { initials: "JJ", name: "Jake Jalbert",                  role: "Cinematographer · Producer",      bg: "linear-gradient(135deg, #2d5f6e, #0a1f28)", photo: null },
-              { initials: "DH", name: "David Hamzik",        role: "Brent",                     bg: "linear-gradient(135deg, #2d5f6e, #15110b)", photo: null },
+              { initials: "JJ", name: "Jake Jalbert",                  role: "Cinematographer · Producer",      bg: "linear-gradient(135deg, #2d5f6e, #0a1f28)", photo: "/images/cast/jake-jalbert.jpg" },
+              { initials: "DH", name: "David Hamzik",        role: "Brent",                     bg: "linear-gradient(135deg, #2d5f6e, #15110b)", photo: "/images/cast/david-hamzik.jpg" },
               { initials: "MB", name: "MG Barnes",           role: "Jake",                      bg: "linear-gradient(135deg, #d49050, #5c2e15)", photo: "/images/cast/mg-barnes.jpg" },
               { initials: "NM", name: "Nick McCallum",       role: "Pops",                      bg: "linear-gradient(135deg, #1a3d4a, #0a0907)", photo: "/images/cast/nick-mccallum.jpg" },
               { initials: "MC", name: "Meghan Carrasquillo", role: "Rosie",                     bg: "linear-gradient(135deg, #d4a04a, #5c2e15)", photo: "/images/cast/meghan-carrasquillo.jpg" },
+              { initials: "SR", name: "Samantha Reddy",      role: "Jenny",                     bg: "linear-gradient(135deg, #5a8a98, #1a3d4a)", photo: "/images/cast/samantha-reddy.jpg" },
+              { initials: "GA", name: "Godderick Alucard",   role: "Trevor",                    bg: "linear-gradient(135deg, #8b4a26, #15110b)", photo: "/images/cast/godderick-alucard.jpg" },
               { initials: "JF", name: "Jim Fitzpatrick",     role: "Producer",                  bg: "linear-gradient(135deg, #5a8a98, #2d5f6e)", photo: "/images/cast/jim-fitzpatrick.jpg" },
               { initials: "NW", name: "Nicole Weider",       role: "Producer",                  bg: "linear-gradient(135deg, #5c2e15, #2a1f12)", photo: "/images/cast/nicole-weider.jpg" },
               { initials: "LF", name: "Lucas Fink",               role: "Pro Skimmer · Red Bull",      bg: "linear-gradient(135deg, #d49050, #2d5f6e)", photo: "/images/cast/lucas-fink.jpg" },
-              { initials: "JK", name: "Jodi Knotts-Fitzpatrick", role: "Line Producer",               bg: "linear-gradient(135deg, #5a8a98, #15110b)", photo: null },
-              { initials: "JA", name: "Jeff Alpert",              role: "Co-Executive Producer",       bg: "linear-gradient(135deg, #5c2e15, #0a0907)", photo: null },
+              { initials: "JK", name: "Jodi Knotts-Fitzpatrick", role: "Line Producer",               bg: "linear-gradient(135deg, #5a8a98, #15110b)", photo: "/images/cast/jodi-knotts.jpg" },
+              { initials: "JA", name: "Jeff Alpert",              role: "Co-Executive Producer",       bg: "linear-gradient(135deg, #5c2e15, #0a0907)", photo: "/images/cast/jeff-alpert.jpg" },
             ].map(({ initials, name, role, bg, photo }) => (
               <div key={name} className="team-card">
                 <div className="team-photo" style={{ background: bg }}>
@@ -1080,38 +1242,78 @@ export default function Home() {
         </div>
       </section>
 
-      {/* MERCH */}
+      {/* GIVEAWAY */}
       <section className="merch" id="merch">
         <div className="merch-inner">
-          <div className="merch-header">
-            <div>
-              <span className="label">The Drop</span>
-              <h2 className="section-title">Wear the <em>Film</em></h2>
-            </div>
-            <a href="#" className="btn"><span>View All →</span></a>
-          </div>
-          <div className="merch-grid">
-            {[
-              { type: "product-tee", name: "Logo Tee", meta: "Heavyweight Cotton", price: "$28", inner: "OFF\nRIP" },
-              { type: "product-cap", name: "Trucker Cap", meta: "Embroidered", price: "$32", inner: "OR" },
-              { type: "product-poster", name: "27×40 Poster", meta: "Theatrical Print", price: "$24", inner: "OFF\nRIP" },
-              { type: "product-board", name: "Sticker Pack", meta: "Set of 6", price: "$8", inner: "★" },
-            ].map(({ type, name, meta, price, inner }) => (
-              <div key={name} className={`product ${type}`}>
-                <div className="product-img-wrap">
-                  <div className="product-img">
-                    <div className="product-img-inner" style={{ whiteSpace: "pre-line" }}>{inner}</div>
-                  </div>
-                </div>
-                <div className="product-info">
-                  <div>
-                    <div className="product-name">{name}</div>
-                    <div className="product-meta">{meta}</div>
-                  </div>
-                  <div className="product-price">{price}</div>
-                </div>
+          <div className="giveaway">
+            <div className="giveaway-text">
+              <span className="label">The Drop · Open Call</span>
+              <h2 className="section-title">Design the <em>Skim Shirt</em></h2>
+              <p className="giveaway-lead">
+                The first piece of official <em>Off Rip</em> merch isn't coming from us. It's coming from you. Design the OFF RIP Skim Shirt, and if yours is picked it becomes the first official drop.
+              </p>
+
+              <div className="giveaway-prize">
+                <span className="giveaway-prize-amount">$500</span>
+                <span className="giveaway-prize-label">USD · paid on<br/>delivery of files</span>
               </div>
-            ))}
+
+              <ol className="giveaway-rules">
+                <li>
+                  <strong>No AI. Every other medium is encouraged.</strong> Drawing, sketching, lettering and calligraphy, photography, paint, collage, or any mix of them. Made by a person is the only requirement.
+                </li>
+                <li>
+                  <strong>Design the whole shirt.</strong> Front, back, sleeve hit, neck tag. Treat it as a garment rather than a single graphic.
+                </li>
+                <li><strong>Show your process.</strong> Post work-in-progress shots. Proof of process is required.</li>
+                <li>
+                  <strong>Tag <a href="https://www.instagram.com/offripskim/" target="_blank" rel="noopener noreferrer">@offripskim</a> and use <span className="tag">#OFFRIPSKIMSHIRT</span></strong> on Instagram to be entered.
+                </li>
+                <li><strong>Winner delivers</strong> PNG, PSD, and adjustable source assets ready for shirt production.</li>
+                <li><strong>$500 USD is paid on delivery</strong> of those files, alongside a signed agreement granting <em>Off Rip</em> merchandising rights to the artwork in perpetuity.</li>
+              </ol>
+
+              {countdown.closed ? (
+                <p className="countdown-closed">Submissions are closed. The winning design has been chosen.</p>
+              ) : (
+                <div className="countdown" aria-label="Time remaining to enter the giveaway">
+                  {[
+                    { n: countdown.days, l: "Days" },
+                    { n: countdown.hours, l: "Hours" },
+                    { n: countdown.minutes, l: "Mins" },
+                    { n: countdown.seconds, l: "Secs" },
+                  ].map(({ n, l }) => (
+                    <div key={l} className="countdown-unit">
+                      <div className="countdown-num">{String(n).padStart(2, "0")}</div>
+                      <div className="countdown-label">{l}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="giveaway-deadline">
+                {countdown.closed ? "Winner announced" : "Submissions close"} · August 28, 2026
+              </div>
+
+              <div className="giveaway-cta">
+                <a
+                  href="https://www.instagram.com/offripskim/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-solid btn-lg"
+                >
+                  <span>{countdown.closed ? "See the Winner" : "Enter on Instagram"}</span>
+                </a>
+              </div>
+
+              <p className="giveaway-note">
+                The full merch line drops right after the winning design is announced.
+              </p>
+            </div>
+
+            <div className="giveaway-art">
+              <img src="/images/merch-coming-soon.jpg" alt="Off Rip merch, coming soon" />
+            </div>
           </div>
         </div>
       </section>
@@ -1122,22 +1324,47 @@ export default function Home() {
           <div className="stream-header">
             <span className="label">Where to Watch</span>
             <h2 className="section-title">Stream <em>Now</em></h2>
-            <p className="stream-sub">Available on all major platforms — wherever you watch the films you love.</p>
+            <p className="stream-sub">Rent, buy, or stream <em>Off Rip</em> now.</p>
           </div>
           <div className="stream-grid">
             {[
-              { name: "Apple TV", href: "#" },
-              { name: "Prime Video", href: "#" },
-              { name: "Plex", href: "https://watch.plex.tv/movie/off-rip" },
-              { name: "YouTube", href: "#" },
-              { name: "Tubi", href: "#" },
-              { name: "Letterboxd", href: "https://letterboxd.com/film/off-rip/" },
+              { name: "Apple TV", href: "https://tv.apple.com/us/movie/off-rip/umc.cmc.40dnibwo0ob8flzacxxs9y5kb?itscg=30200&itsct=plexinc&mttnsubad=umc.cmc.40dnibwo0ob8flzacxxs9y5kb&at=1001l3duQ" },
+              { name: "Prime Video", href: "https://www.primevideo.com/detail/0RDECSN5LZ7S5PESUMDU226JFI" },
             ].map(({ name, href }) => (
               <a key={name} href={href} className="stream-btn" target="_blank" rel="noopener noreferrer">
                 <span>{name}</span>
                 <span className="arrow">→</span>
               </a>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PODCAST */}
+      <section className="podcast-section" id="offscript">
+        <div className="podcast-inner">
+          <span className="label">The Podcast</span>
+          <h2 className="section-title">Off <em>Script</em></h2>
+          <p className="podcast-sub">
+            Conversations from New Terrain Creative, hosted by Jadon Cal Fitzpatrick. New episodes on YouTube.
+          </p>
+          <div className="podcast-embed">
+            <iframe
+              src="https://www.youtube.com/embed/iqTZuaIFcXk?list=PL-7hHxlDqSDA2qapzKaQl6hIdMZ4krd7t&rel=0"
+              title="Off Script Podcast"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+          <div className="podcast-cta">
+            <a
+              href="https://www.youtube.com/playlist?list=PL-7hHxlDqSDA2qapzKaQl6hIdMZ4krd7t"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn"
+            >
+              <span>Watch on YouTube</span>
+            </a>
           </div>
         </div>
       </section>
@@ -1153,12 +1380,27 @@ export default function Home() {
         <div className="email-cta-inner">
           <span className="label">Stay Close</span>
           <h2 className="section-title">Join the <em>Lineup</em></h2>
-          <p>Tour dates, screenings, and the next film from Jadon Cal Fitzpatrick — direct to your inbox.</p>
-          <form className="email-form" onSubmit={(e) => { e.preventDefault(); const s = e.currentTarget.querySelector(".email-success") as HTMLElement; if(s) s.classList.add("show"); e.currentTarget.reset(); }}>
-            <input type="email" required placeholder="your email address" />
-            <button type="submit">Subscribe →</button>
+          <p>Screenings, new releases, and what's next from Jadon Cal Fitzpatrick and New Terrain Creative. One list for <em>Off Rip</em>, <em>Off Script</em>, and everything after.</p>
+          <form className="email-form" onSubmit={handleSubscribe}>
+            <input
+              type="email"
+              required
+              placeholder="your email address"
+              aria-label="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={status === "loading"}
+            />
+            <button type="submit" disabled={status === "loading"}>
+              {status === "loading" ? "Sending…" : "Subscribe →"}
+            </button>
           </form>
-          <div className="email-success">— You're in. See you on the sand.</div>
+          <div aria-live="polite">
+            {status === "ok" && (
+              <div className="email-success">You're in. See you on the sand.</div>
+            )}
+            {status === "error" && <div className="email-error">{error}</div>}
+          </div>
         </div>
       </section>
 
@@ -1167,6 +1409,7 @@ export default function Home() {
         <div className="footer-title">OFF RIP</div>
         <div className="footer-socials">
           <a href="https://www.instagram.com/offripskim/" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="https://www.youtube.com/playlist?list=PL-7hHxlDqSDA2qapzKaQl6hIdMZ4krd7t" target="_blank" rel="noopener noreferrer">Off Script</a>
           <a href="https://www.imdb.com/title/tt12643976/" target="_blank" rel="noopener noreferrer">IMDb</a>
           <a href="https://letterboxd.com/film/off-rip/" target="_blank" rel="noopener noreferrer">Letterboxd</a>
           <a href="mailto:hello@offripmovie.com">Press</a>
