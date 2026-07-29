@@ -1269,6 +1269,9 @@ export default function Home() {
                 <li>
                   <strong>Design the whole shirt.</strong> Front, back, sleeve hit, neck tag. Treat it as a garment rather than a single graphic.
                 </li>
+                <li>
+                  <strong>Work from the <a href="https://drive.google.com/drive/folders/1dLnLOVe3sr5ajBz8WWEhgUpDpJ2V_YZS" target="_blank" rel="noopener noreferrer">official design assets</a>.</strong> Logos, stills, and type live in the shared drive folder. Everything you need to build on is in there.
+                </li>
                 <li><strong>Show your process.</strong> Post work-in-progress shots. Proof of process is required.</li>
                 <li>
                   <strong>Tag <a href="https://www.instagram.com/offripskim/" target="_blank" rel="noopener noreferrer">@offripskim</a> and use <span className="tag">#OFFRIPSKIMSHIRT</span></strong> on Instagram to be entered.
@@ -1308,6 +1311,16 @@ export default function Home() {
                 >
                   <span>{countdown.closed ? "See the Winner" : "Enter on Instagram"}</span>
                 </a>
+                {!countdown.closed && (
+                  <a
+                    href="https://drive.google.com/drive/folders/1dLnLOVe3sr5ajBz8WWEhgUpDpJ2V_YZS"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-lg"
+                  >
+                    <span>Design Assets</span>
+                  </a>
+                )}
               </div>
 
               <p className="giveaway-note">
