@@ -1270,7 +1270,7 @@ export default function Home() {
                   <strong>Design the whole shirt.</strong> Front, back, sleeve hit, neck tag. Treat it as a garment rather than a single graphic.
                 </li>
                 <li>
-                  <strong>Work from the <a href="https://drive.google.com/drive/folders/1dLnLOVe3sr5ajBz8WWEhgUpDpJ2V_YZS" target="_blank" rel="noopener noreferrer">official design assets</a>.</strong> Logos, stills, and type live in the shared drive folder. Everything you need to build on is in there.
+                  <strong><a href="https://drive.google.com/drive/folders/1dLnLOVe3sr5ajBz8WWEhgUpDpJ2V_YZS" target="_blank" rel="noopener noreferrer">Official design assets</a> are there if you want them.</strong> Logos, stills, and type live in the shared drive folder. Use as much or as little as you like, or none of it at all.
                 </li>
                 <li><strong>Show your process.</strong> Post work-in-progress shots. Proof of process is required.</li>
                 <li>
