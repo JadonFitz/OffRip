@@ -4,3 +4,4 @@ dist/
 *.local
 ._*
 .DS_Store
+.vercel
